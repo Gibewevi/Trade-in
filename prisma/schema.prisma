@@ -1,0 +1,55 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            Int             @id @default(autoincrement())
+  email         String          @unique
+  password      String
+  subscriptions Subscription[]
+}
+
+model Subscription {
+  id        Int         @id @default(autoincrement())
+  userId    Int
+  user      User        @relation(fields: [userId], references: [id])
+  type      SubType
+  startDate DateTime
+  endDate   DateTime
+}
+
+enum SubType {
+  INVESTOR
+  TRADER
+}
+
+model Chapter {
+  id         Int       @id @default(autoincrement())
+  title      String
+  lessons    Lesson[]
+}
+
+model Lesson {
+  id          Int         @id @default(autoincrement())
+  title       String
+  contentUrl  String
+  chapterId   Int
+  chapter     Chapter     @relation(fields: [chapterId], references: [id])
+  accessLevel AccessLevel
+}
+
+enum AccessLevel {
+  INVESTOR
+  TRADER
+}
