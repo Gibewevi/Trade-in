@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Header() {
     return (
-        <div className="bg-red-400 w-full h-[80px]">
+        <div className=" fixed w-full h-[80px]">
             <div className="flex flex-row h-full bg-slate-100 items-center p-6">
                 <div className="flex flex-1 gap-x-[70px]">
                     <Link href="/" aria-label="Homepage">
@@ -15,9 +15,15 @@ export default function Header() {
                         <Link href="/community"><span className="text-slate-500 hover:text-slate-900 hover:underline hover:underline-offset-4">Community</span></Link>
                     </nav>
                 </div>
-                <Link href="/login">
-                <button className="h-[40px] bg-slate-800 p-4 rounded-xl flex justify-center items-center"><span className="text-slate-100 text-md font-bold">Commence maintenant</span></button>
-                </Link>
+                <div className="flex flex-row justify-center items-center gap-x-5">
+                    <div className="flex flex-row w-[100px]">
+                        <img src='images/CarbonUser.svg' className="w-[25px]" />
+                        <span className="text-md text-slate-900 font-semibold ml-2">Login</span>
+                    </div>
+                    <Link href="/join">
+                        <button className="h-[40px] bg-slate-800 p-4 rounded-xl flex justify-center items-center"><span className="text-slate-100 text-md font-bold">Commence maintenant</span></button>
+                    </Link>
+                </div>
             </div>
         </div>
     )
