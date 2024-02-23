@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,20 +7,24 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
+model user {
   id            Int             @id @default(autoincrement())
   email         String          @unique
   password      String
-  subscriptions Subscription[]
+  subscriptions subscription[]  @relation("userToSubscription")
+
+  @@map("users") // Spécifie le nom de la table en minuscules dans la BDD
 }
 
-model Subscription {
-  id        Int         @id @default(autoincrement())
+model subscription {
+  id        Int       @id @default(autoincrement())
   userId    Int
-  user      User        @relation(fields: [userId], references: [id])
+  user      user      @relation("userToSubscription", fields: [userId], references: [id])
   type      SubType
   startDate DateTime
   endDate   DateTime
+
+  @@map("subscriptions")
 }
 
 enum SubType {
@@ -34,19 +32,27 @@ enum SubType {
   TRADER
 }
 
-model Chapter {
-  id         Int       @id @default(autoincrement())
-  title      String
-  lessons    Lesson[]
+model chapter {
+  id       Int       @id @default(autoincrement())
+  title    String
+  lessons  lesson[]  @relation("chapterToLesson")
+
+  @@map("chapters")
 }
 
-model Lesson {
-  id          Int         @id @default(autoincrement())
-  title       String
-  contentUrl  String
-  chapterId   Int
-  chapter     Chapter     @relation(fields: [chapterId], references: [id])
-  accessLevel AccessLevel
+model lesson {
+  id           Int         @id @default(autoincrement())
+  title        String
+  contentUrl   String
+  thumbnailUrl String
+  isNew        Boolean     @default(true)
+  createdAt    DateTime    @default(now())
+  chapterId    Int
+  chapter      chapter     @relation("chapterToLesson", fields: [chapterId], references: [id])
+  accessLevel  AccessLevel
+  isFree       Boolean     @default(false) // Champ ajouté pour marquer si la leçon est gratuite
+
+  @@map("lessons")
 }
 
 enum AccessLevel {
