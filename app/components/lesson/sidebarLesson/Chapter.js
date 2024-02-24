@@ -1,5 +1,6 @@
 import Lesson from "./Lesson"
-export default function Chapter({ chapterData }) {
+
+export default async function Chapter({chapterData}) {
     const formatNumber = (number) => number < 10 ? `0${number}` : number;
     return (
         <div className="flex flex-col w-full">
