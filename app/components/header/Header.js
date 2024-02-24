@@ -21,7 +21,7 @@ export default function Header() {
                         <span className="text-md text-slate-900 font-semibold ml-2">Login</span>
                     </div>
                     <Link href="/join">
-                        <button className="h-[40px] bg-slate-800 p-4 rounded-xl flex justify-center items-center"><span className="text-slate-100 text-md font-bold">Commence maintenant</span></button>
+                        <button className="h-[40px] bg-[#705DF2] p-4 rounded-xl flex justify-center items-center"><span className="text-slate-100 text-md font-bold">Commence maintenant</span></button>
                     </Link>
                 </div>
             </div>
