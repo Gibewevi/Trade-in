@@ -10,6 +10,7 @@ export default function Header() {
                     </Link>
                     <nav className="flex flex-row items-center gap-x-[70px] ">
                         <Link href="/lessons"><span className="text-slate-500 hover:text-slate-900 hover:underline hover:underline-offset-4">Lessons</span></Link>
+                        <Link href="/challenges"><span className="text-slate-500 hover:text-slate-900 hover:underline hover:underline-offset-4">Challenges</span></Link>
                         <Link href="/airdrops"><span className="text-slate-500 hover:text-slate-900 hover:underline hover:underline-offset-4">Airdrops</span></Link>
                         {/* <Link href="/community"><span className="text-slate-900">actualités</span></Link> */}
                         <Link href="/community"><span className="text-slate-500 hover:text-slate-900 hover:underline hover:underline-offset-4">Community</span></Link>
@@ -21,7 +22,10 @@ export default function Header() {
                         <span className="text-md text-slate-900 font-semibold ml-2">Login</span>
                     </div>
                     <Link href="/join">
-                        <button className="h-[40px] bg-[#705DF2] p-4 rounded-xl flex justify-center items-center"><span className="text-slate-100 text-md font-bold">Commence maintenant</span></button>
+                        <button className="group h-[40px] bg-[#705DF2] p-4 rounded-xl flex justify-center items-center overflow-hidden relative">
+                            <div className="absolute left-0 top-0 w-0 h-full bg-[#8b7bf3] transition-all duration-300 ease-in-out group-hover:w-full"></div>
+                            <span className="z-10 text-slate-100 text-md font-bold">Commence maintenant</span>
+                        </button>
                     </Link>
                 </div>
             </div>

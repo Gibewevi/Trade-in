@@ -46,6 +46,20 @@ body {
   }
 }
 
+/* styles/globals.css */
+.video-js .vjs-control-bar {
+  background-color: #0B0B0B !important; /* Couleur bleue de Tailwind bg-blue-500 */
+}
+
+.video-js .vjs-button > button {
+  color: #ffffff !important; /* Couleur blanche de Tailwind text-white */
+}
+
+.video-js .vjs-play-progress,
+.video-js .vjs-play-progress .vjs-time-tooltip {
+  background-color: #6b46c1 !important; /* Correspond à bg-purple-500 dans Tailwind CSS */
+}
+
 .nav {
   --color: #ffffff; 
   background: none;

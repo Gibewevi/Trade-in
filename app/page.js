@@ -5,7 +5,7 @@ import Link from "next/link"; // Importez le composant Link
 
 export default function Home() {
   return (
-    <div className="w-full bg-slate-100 h-screen">
+    <div className="w-full bg-slate-100 ">
       <Become></Become>
         {/* Utilisez le composant Link pour naviguer */}
         <Link href="/lesson">
