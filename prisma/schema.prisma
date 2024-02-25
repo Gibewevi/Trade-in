@@ -43,6 +43,7 @@ model chapter {
 model lesson {
   id           Int         @id @default(autoincrement())
   title        String
+  slug         String    @unique
   contentUrl   String
   thumbnailUrl String
   isNew        Boolean     @default(true)
