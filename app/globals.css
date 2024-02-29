@@ -47,6 +47,10 @@ body {
 }
 
 /* styles/globals.css */
+.video-js {
+  height: 100%;
+}
+
 .video-js .vjs-control-bar {
   background-color: #0B0B0B !important; /* Couleur bleue de Tailwind bg-blue-500 */
 }
