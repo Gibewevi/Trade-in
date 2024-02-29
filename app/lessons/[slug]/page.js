@@ -12,7 +12,6 @@ export default async function Page({ params }) {
     const lesson = await prisma.lesson.findUnique({
         where: { slug: slug },
     });
-    console.log('lesson : ', lesson);
 
     // Vérifiez que la leçon a été trouvée avant de tenter de l'afficher
     if (!lesson) {
@@ -20,11 +19,11 @@ export default async function Page({ params }) {
     }
 
     return (
-        <div className='flex pt-[80px] w-full'>
+        <div className='flex pt-[60px] w-full h-screen z-0'>
             <SidebarLesson>
-                <Chapters />
+                <Chapters lessonActive={slug} />
             </SidebarLesson>
-            <div className='mx-auto max-w-7xl pt-5'>
+            <div className='w-full h-[100%]'>
                 <PlayerVideo lesson={lesson} />
             </div>
         </div>
