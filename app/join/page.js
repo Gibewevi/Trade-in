@@ -1,11 +1,20 @@
+"use client"
+import { useState, useEffect } from "react";
+import FormJoin from "../components/join/form/formJoin/FormJoin";
+import HeaderJoin from "../components/join/form/formJoin/HeaderJoin";
+import Checkout from "../components/join/form/formCheckout/Checkout";
 export default function Page() {
+    const [stepJoin, setStepJoin] = useState('join');
+    const [user, setUser] = useState();
+    const handleJoin = (user) => {
+        setUser(user);
+        setStepJoin('checkout');
+    };
     return (
         <div className="flex items-center justify-center w-full h-screen bg-slate-200">
             <div className="flex flex-col w-[500px] shadow-2xl rounded-2xl overflow-hidden">
-                <div className="flex justify-center items-center w-full h-[100px] bg-[#8676F4]">
-                    <span className="text-xl text-slate-200 font-bold">Join</span>
-                </div>
-                <div className="w-full h-[420px] bg-slate-100"></div>
+            <HeaderJoin />
+            { stepJoin == 'join' ?  <FormJoin handleJoin={handleJoin}/> : <Checkout />}
             </div>
         </div>
     );

@@ -12,8 +12,8 @@ export default function Header() {
                         <Link href="/lessons/definition-des-cryptomonnaies"><span className="text-slate-500 hover:text-slate-900 hover:underline hover:underline-offset-4">Lessons</span></Link>
                         <Link href="/challenges"><span className="text-slate-500 hover:text-slate-900 hover:underline hover:underline-offset-4">Challenges</span></Link>
                         <Link href="/airdrops"><span className="text-slate-500 hover:text-slate-900 hover:underline hover:underline-offset-4">Airdrops</span></Link>
-                        {/* <Link href="/community"><span className="text-slate-900">actualités</span></Link> */}
-                        <Link href="/community"><span className="text-slate-500 hover:text-slate-900 hover:underline hover:underline-offset-4">Community</span></Link>
+                        <Link href="/insights"><span className="text-slate-900">Insights</span></Link>
+                        <Link href="/watchlists"><span className="text-slate-500 hover:text-slate-900 hover:underline hover:underline-offset-4">watchlists</span></Link>
                     </nav>
                 </div>
                 <div className="flex flex-row justify-center items-center gap-x-5">

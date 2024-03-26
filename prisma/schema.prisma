@@ -33,30 +33,80 @@ enum SubType {
 }
 
 model chapter {
-  id       Int       @id @default(autoincrement())
-  title    String
-  lessons  lesson[]  @relation("chapterToLesson")
+ id          Int      @id @default(autoincrement())
+ chapterId   Int      @unique
+ title       String
+ description String
+ lessons     lesson[] @relation("chapterToLesson")
+ duration     Int     @default(0)
 
-  @@map("chapters")
+ @@map("chapters")
 }
 
 model lesson {
-  id           Int         @id @default(autoincrement())
-  title        String
-  slug         String    @unique
-  contentUrl   String
-  thumbnailUrl String
-  isNew        Boolean     @default(true)
-  createdAt    DateTime    @default(now())
-  chapterId    Int
-  chapter      chapter     @relation("chapterToLesson", fields: [chapterId], references: [id])
-  accessLevel  AccessLevel
-  isFree       Boolean     @default(false) // Champ ajouté pour marquer si la leçon est gratuite
+ id           Int         @id @default(autoincrement())
+ lessonId     Int         @unique
+ title        String
+ slug         String      @unique
+ contentUrl   String
+ thumbnailUrl String
+ isNew        Boolean     @default(true)
+ createdAt    DateTime    @default(now())
+ chapterId    Int
+ chapter      chapter     @relation("chapterToLesson", fields: [chapterId], references: [chapterId])
+ accessLevel AccessLevel
+ isFree       Boolean     @default(false)
+ duration     Int         @default(0)
 
-  @@map("lessons")
+ @@map("lessons")
 }
+
 
 enum AccessLevel {
   INVESTOR
   TRADER
 }
+
+model Insight {
+  id         Int        @id @default(autoincrement())
+  pair       String     // Nom de la paire échangée
+  riskLevel  RiskLevel  // Niveau de risque associé à l'Insight
+  status     Status     // Statut de l'Insight (new, update, close)
+  createdAt  DateTime   @default(now()) // Date de création de l'Insight
+  updatedAt  DateTime   @updatedAt      // Date de la dernière mise à jour de l'Insight
+  images     InsightImage[] // Relation avec la table InsightImage
+
+  @@map("insights")
+}
+
+model InsightImage {
+  id        Int      @id @default(autoincrement())
+  imageUrl  String   // URL de l'image
+  insightId Int      // Clé étrangère reliant à Insight
+  insight   Insight  @relation(fields: [insightId], references: [id])
+  
+  @@map("insight_images")
+}
+
+model Tweet {
+  id          Int      @id @default(autoincrement())
+  tweetId     String   @unique // L'ID unique du tweet fourni par Twitter
+  content     String   // Des informations textuelles relatives au tweet, comme des mots-clés
+  publishedAt DateTime // La date de parution du tweet sur Twitter
+  createdAt   DateTime @default(now()) // La date de stockage du tweet dans votre base de données
+
+  @@map("tweets") // Spécifie le nom de la table en minuscules dans la BDD
+}
+
+enum RiskLevel {
+  EASY
+  MODERATE
+  HARD
+}
+
+enum Status {
+  NEW
+  UPDATE
+  CLOSE
+}
+
