@@ -6,7 +6,7 @@ import "video.js/dist/video-js.css";
 export default function PlayerVideo({ content }) {
     const contentUrl = content.contentUrl
     const videoRef = useRef(null);
-
+    
     useEffect(() => {
         if (videoRef.current) {
             videojs(videoRef.current, {
@@ -23,7 +23,11 @@ export default function PlayerVideo({ content }) {
 
     return (
         <div className="relative flex items-center justify-center h-full">
-            <video controls ref={videoRef} className="video-js w-full" />
+            <div className="flex-none w-[15%] max-w-[260px] h-full bg-[#0B0B0B] bg-opacity-50"></div>
+            <div className="flex-1 h-full">
+                <video controls ref={videoRef} className="video-js w-full" />
+            </div>
+            <div className="flex-none w-[15%] max-w-[260px] h-full bg-[#0B0B0B] bg-opacity-50"></div>
         </div>
     );
 }

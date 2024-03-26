@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useRef } from 'react';
+import PlayerVideo from '../../playerVideo/PlayerVideo';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
@@ -13,6 +14,9 @@ export default function Become() {
   const heuresRef = useRef(null);
 
   // Phrases divisées en mots pour l'animation, organisées par ligne
+  const content = {
+    contentUrl: '/lessons/definition-des-cryptomonnaies.mp4'
+  }
   const lines = [
     ["De", "novice", "à", "expert", "en", "trading."], // Première ligne
     ["une seule formation", "uniquement."] // Deuxième ligne
@@ -62,9 +66,9 @@ export default function Become() {
 
 
   return (
-    <div className="w-full h-screen bg-[#150c21] pt-[190px]">
-      <div className="w-full">
-        <div className="flex flex-col gap-y-[40px] justify-center items-center mx-auto max-w-2xl h-[200px]">
+    <div className="w-full pb-[100px] bg-[#150c21] pt-[100px]">
+      <div className="max-w-2xl mx-auto">
+        <div className="flex flex-col gap-y-[50px] justify-center items-center mx-auto max-w-2xl">
           {/* TITLE */}
           <div className="flex flex-col justify-center items-center">
             {/* Itération sur chaque ligne */}
@@ -83,10 +87,12 @@ export default function Become() {
               </div>
             ))}
           </div>
+
           {/* SPEECH */}
           <div className="flex justify-center items-center">
             <span className="text-lg font-light text-center">Rejoins BitLearn et <span className="font-bold">accède à vie</span> à une formation complète et <span className="font-bold">facile d'accès</span> en trading avec 66 cours conçus pour que tu puisses <span className="font-bold">devenir indépendant</span>.</span>
           </div>
+
           {/* LESSONS */}
           <div className="flex flex-row w-full h-[100px]">
             <div className="flex flex-col justify-center items-center w-full border-r-[0.1em] border-[#2D2538]">
@@ -102,6 +108,12 @@ export default function Become() {
               <span className="text-lg">heures de vidéos</span>
             </div>
           </div>
+
+          {/* VIDEO */}
+          <div className='w-[800px] h-[450px] rounded-2xl overflow-hidden'>
+            <PlayerVideo content={content} />
+          </div>
+
         </div>
       </div>
     </div>

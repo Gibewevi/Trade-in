@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
-import PlayerVideo from '@/app/components/playerVideo/PlayerVideo';
+import PlayerVideo from '@/app/components/playerVideo/PlayerLessonVideo';
 import SidebarLesson from '@/app/components/lesson/sidebarLesson/SidebarLesson';
 import Chapters from '@/app/components/lesson/sidebarLesson/Chapters';
 
@@ -9,12 +9,12 @@ export default async function Page({ params }) {
     const { slug } = params;
 
     // Utilisez Prisma pour récupérer les données de la leçon associées au slug
-    const lesson = await prisma.lesson.findUnique({
+    const content = await prisma.lesson.findUnique({
         where: { slug: slug },
     });
 
     // Vérifiez que la leçon a été trouvée avant de tenter de l'afficher
-    if (!lesson) {
+    if (!content) {
         return <div>Leçon non trouvée</div>;
     }
 
@@ -24,7 +24,7 @@ export default async function Page({ params }) {
                 <Chapters lessonActive={slug} />
             </SidebarLesson>
             <div className='w-full h-[100%]'>
-                <PlayerVideo lesson={lesson} />
+                <PlayerVideo content={content} />
             </div>
         </div>
     );
