@@ -31,15 +31,19 @@ export default function CheckoutForm() {
       switch (paymentIntent.status) {
         case "succeeded":
           setMessage("Payment succeeded!");
+          console.log("Détails du paiement réussi:", paymentIntent);
           break;
         case "processing":
           setMessage("Your payment is processing.");
+          console.log("Your payment is processing:", paymentIntent);
           break;
         case "requires_payment_method":
           setMessage("Your payment was not successful, please try again.");
+          console.log("Your payment was not successful, please try again:", paymentIntent);
           break;
         default:
           setMessage("Something went wrong.");
+          console.log("Something went wrong:", paymentIntent);
           break;
       }
     });
@@ -83,21 +87,25 @@ export default function CheckoutForm() {
   };
 
   return (
-    <form id="payment-form" onSubmit={handleSubmit} className="p-5 flex flex-col">
+    <form id="payment-form" onSubmit={handleSubmit} className="p-5 flex flex-col relative">
       <PaymentElement id="payment-element" options={paymentElementOptions} />
       <div className="flex flex-row gap-x-5 mt-5">
         <div className="flex flex-row">
           <div>
-
-          <button disabled={isLoading || !stripe || !elements} id="submit" className="group h-[60px] bg-[#8b7bf3] p-4 rounded-xl flex justify-center items-center overflow-hidden relative">
-            <div className="absolute left-0 top-0 w-0 h-full bg-[#705DF2] transition-all duration-300 ease-in-out group-hover:w-full"></div>
-            <span id="button-text" className="z-10 font-bold">
-              {isLoading ? <div className="spinner" id="spinner"></div> : "Pay USD 95.00"}
-            </span>
-          </button>
-          {/* Show any error or success messages */}
-          {message && <div id="payment-message" className="text-red-500">{message}</div>}
-        </div>
+            <button disabled={isLoading || !stripe || !elements} id="submit" className="absolute group w-[150px] h-[60px] bg-[#8b7bf3] p-4 rounded-xl flex justify-center items-center overflow-hidden relative">
+              {isLoading ? (
+                <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+              ) : (
+                <span className="z-10 font-bold">Pay USD 95.00</span>
+              )}
+              <div className="absolute left-0 top-0 w-0 h-full bg-[#705DF2] transition-all duration-300 ease-in-out group-hover:w-full"></div>
+            </button>
+            {/* Show any error or success messages */}
+            {message && <div id="payment-message" className="text-red-500">{message}</div>}
+          </div>
         </div>
       </div>
     </form>

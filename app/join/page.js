@@ -12,9 +12,9 @@ export default function Page() {
     };
     return (
         <div className="flex items-center justify-center w-full h-screen bg-slate-200">
-            <div className="flex flex-col w-[500px] shadow-2xl rounded-2xl overflow-hidden">
-            <HeaderJoin />
-            { stepJoin == 'join' ?  <FormJoin handleJoin={handleJoin}/> : <Checkout />}
+            <div className="flex flex-col w-[500px] min-h-[500px] shadow-2xl rounded-2xl overflow-hidden duration-200 transition-all ease-in-out ">
+                <HeaderJoin />
+                {stepJoin == 'join' ? <FormJoin handleJoin={handleJoin} /> : <Checkout />}
             </div>
         </div>
     );

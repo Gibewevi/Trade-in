@@ -3,7 +3,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 const calculateOrderAmount = (items) => {
   // Remplacez cette constante par un calcul du montant de la commande
-  return 1400;
+  return 9500;
 };
 
 export async function POST(request) {
