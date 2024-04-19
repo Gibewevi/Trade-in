@@ -1,8 +1,8 @@
 import HeaderConfirmation from "../components/confirmation/HeaderConfirmation";
 export default function Page() {
     return (
-        <div className="flex items-center justify-center w-full h-screen bg-red-400">
-            <div className="w-[500px] bg-slate-100 rounded-2xl overflow-hidden">
+        <div className="flex items-center justify-center w-full h-screen bg-slate-200">
+            <div className="w-[500px] bg-slate-100 rounded-2xl overflow-hidden shadow-2xl">
                 <HeaderConfirmation />
                 <div className="flex flex-col  gap-y-3 p-5 text-slate-800 relative">
                     <span>Tu as désormais accès à la formation complète.</span>

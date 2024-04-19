@@ -7,30 +7,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum AccessLevel {
+  FREE
+  PREMIUM
+}
+
 model user {
   id            Int             @id @default(autoincrement())
   email         String          @unique
   password      String
   subscriptions subscription[]  @relation("userToSubscription")
-
-  @@map("users") // Spécifie le nom de la table en minuscules dans la BDD
+  
+  @@map("users")
 }
 
 model subscription {
   id        Int       @id @default(autoincrement())
   userId    Int
   user      user      @relation("userToSubscription", fields: [userId], references: [id])
-  type      SubType
-  startDate DateTime
-  endDate   DateTime
-
   @@map("subscriptions")
 }
 
-enum SubType {
-  INVESTOR
-  TRADER
-}
 
 model chapter {
  id          Int      @id @default(autoincrement())
@@ -61,33 +58,6 @@ model lesson {
  @@map("lessons")
 }
 
-
-enum AccessLevel {
-  INVESTOR
-  TRADER
-}
-
-model Insight {
-  id         Int        @id @default(autoincrement())
-  pair       String     // Nom de la paire échangée
-  riskLevel  RiskLevel  // Niveau de risque associé à l'Insight
-  status     Status     // Statut de l'Insight (new, update, close)
-  createdAt  DateTime   @default(now()) // Date de création de l'Insight
-  updatedAt  DateTime   @updatedAt      // Date de la dernière mise à jour de l'Insight
-  images     InsightImage[] // Relation avec la table InsightImage
-
-  @@map("insights")
-}
-
-model InsightImage {
-  id        Int      @id @default(autoincrement())
-  imageUrl  String   // URL de l'image
-  insightId Int      // Clé étrangère reliant à Insight
-  insight   Insight  @relation(fields: [insightId], references: [id])
-  
-  @@map("insight_images")
-}
-
 model Tweet {
   id          Int      @id @default(autoincrement())
   tweetId     String   @unique // L'ID unique du tweet fourni par Twitter
@@ -98,15 +68,25 @@ model Tweet {
   @@map("tweets") // Spécifie le nom de la table en minuscules dans la BDD
 }
 
-enum RiskLevel {
-  EASY
-  MODERATE
-  HARD
+model Category {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String?
+  prompt      String?  // Ajout d'un champ prompt pour stocker le modèle de prompt de génération de texte
+  articles    Article[] @relation("categoryToArticle")
+  
+  @@map("categories")
 }
 
-enum Status {
-  NEW
-  UPDATE
-  CLOSE
+model Article {
+  id          Int       @id @default(autoincrement())
+  title       String
+  content     String
+  htmlContent String
+  publishedAt DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  categoryId  Int
+  category    Category  @relation("categoryToArticle", fields: [categoryId], references: [id])
+  
+  @@map("articles")
 }
-

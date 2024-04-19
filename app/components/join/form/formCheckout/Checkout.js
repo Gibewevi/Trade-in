@@ -10,7 +10,7 @@ import CheckoutForm from "./CheckoutForm";
 // This is your test publishable API key.
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 
-export default function Checkout() {
+export default function Checkout({email}) {
   const [clientSecret, setClientSecret] = React.useState("");
 
   React.useEffect(() => {
@@ -18,7 +18,10 @@ export default function Checkout() {
     fetch("/api/create-payment-intent", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ items: [{ id: "xl-tshirt" }] }),
+      body: JSON.stringify({
+      items: [{ id: "xl-tshirt" }],
+      email: email, 
+    }),
     })
       .then((res) => res.json())
       .then((data) => setClientSecret(data.clientSecret));

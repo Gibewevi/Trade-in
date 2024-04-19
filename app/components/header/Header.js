@@ -10,8 +10,9 @@ export default function Header() {
                     </Link>
                     <nav className="flex flex-row items-center gap-x-[70px] ">
                         <Link href="/lessons/definition-des-cryptomonnaies"><span className="text-slate-500 hover:text-slate-900 hover:underline hover:underline-offset-4">Lessons</span></Link>
+                        <Link href="/actuality"><span className="text-slate-500 hover:text-slate-900 hover:underline hover:underline-offset-4">Actuality</span></Link>
                         <Link href="/challenges"><span className="text-slate-500 hover:text-slate-900 hover:underline hover:underline-offset-4">Challenges</span></Link>
-                        <Link href="/airdrops"><span className="text-slate-500 hover:text-slate-900 hover:underline hover:underline-offset-4">Airdrops</span></Link>
+                        {/* <Link href="/airdrops"><span className="text-slate-500 hover:text-slate-900 hover:underline hover:underline-offset-4">Airdrops</span></Link> */}
                         <Link href="/insights"><span className="text-slate-900">Insights</span></Link>
                         <Link href="/watchlists"><span className="text-slate-500 hover:text-slate-900 hover:underline hover:underline-offset-4">watchlists</span></Link>
                     </nav>

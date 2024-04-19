@@ -1,4 +1,5 @@
 'use client'
+import userService from "@/app/service/user";
 import React from "react";
 import {
   PaymentElement,
@@ -6,10 +7,9 @@ import {
   useElements
 } from "@stripe/react-stripe-js";
 
-export default function CheckoutForm() {
+export default function CheckoutForm(props) {
   const stripe = useStripe();
   const elements = useElements();
-
 
   const [message, setMessage] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -19,34 +19,14 @@ export default function CheckoutForm() {
       return;
     }
 
-    const clientSecret = new URLSearchParams(window.location.search).get(
-      "payment_intent_client_secret"
-    );
+    const clientSecret = new URLSearchParams(window.location.search).get("payment_intent_client_secret");
 
     if (!clientSecret) {
       return;
     }
 
-    stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
-      switch (paymentIntent.status) {
-        case "succeeded":
-          setMessage("Payment succeeded!");
-          console.log("Détails du paiement réussi:", paymentIntent);
-          break;
-        case "processing":
-          setMessage("Your payment is processing.");
-          console.log("Your payment is processing:", paymentIntent);
-          break;
-        case "requires_payment_method":
-          setMessage("Your payment was not successful, please try again.");
-          console.log("Your payment was not successful, please try again:", paymentIntent);
-          break;
-        default:
-          setMessage("Something went wrong.");
-          console.log("Something went wrong:", paymentIntent);
-          break;
-      }
-    });
+    // Rendre la fonction asynchrone pour utiliser await à l'intérieur
+    
   }, [stripe]);
 
   const handleSubmit = async (e) => {
@@ -60,19 +40,15 @@ export default function CheckoutForm() {
 
     setIsLoading(true);
 
-    const { error } = await stripe.confirmPayment({
+    const { error, paymentIntent } = await stripe.confirmPayment({
       elements,
       confirmParams: {
         // Make sure to change this to your payment completion page
-        return_url: "http://localhost:3000",
+        return_url: "http://localhost:3000/confirmation",
       },
     });
 
-    // This point will only be reached if there is an immediate error when
-    // confirming the payment. Otherwise, your customer will be redirected to
-    // your `return_url`. For some payment methods like iDEAL, your customer will
-    // be redirected to an intermediate site first to authorize the payment, then
-    // redirected to the `return_url`.
+
     if (error.type === "card_error" || error.type === "validation_error") {
       setMessage(error.message);
     } else {

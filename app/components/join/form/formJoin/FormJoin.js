@@ -27,9 +27,6 @@ export default withFormik({
             .email("")
     }),
     handleSubmit: (values, { props }) => {
-        const user = {
-            email: values.email
-        }
-        props.handleJoin(user);
+        props.handleJoin(values.email);
     }
 })(FormJoin);
