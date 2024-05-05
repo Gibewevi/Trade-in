@@ -4,6 +4,21 @@ import { randomBytes } from 'crypto';
 
 const prisma = new PrismaClient();
 
+// Fonction pour vérifier que l'utilisateur existe par son email
+const findUserByEmail = async (email) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        email: email
+      }
+    });
+    return user;
+  } catch (error) {
+    console.error("Error finding user by email:", error);
+    throw error;
+  }
+};
+
 const addNewUser = async (user) => {
   console.log('user model : ', user);
   try {
@@ -23,6 +38,7 @@ const addNewUser = async (user) => {
 };
 const userModel = {
  addNewUser,
+ findUserByEmail
 };
 
 export default userModel;

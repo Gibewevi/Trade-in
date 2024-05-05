@@ -1,4 +1,3 @@
-// Importez le bon contrôleur pour gérer les utilisateurs.
 import userController from "@/app/server/controllers/UserController";
 
 export async function POST(request) {
@@ -10,7 +9,7 @@ export async function POST(request) {
     console.log('user : ', userData);
     // Ajoutez l'utilisateur avec les données reçues.
     const newUser = await userController.addNewUser(userData);
-    
+    console.log('new user : ', newUser);
     // Répondez avec le nouvel utilisateur ajouté.
     return new Response(JSON.stringify(newUser), {
       status: 200,
