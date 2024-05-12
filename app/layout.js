@@ -13,8 +13,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-          <Header></Header>
+        <Header />
+        <div style={{ paddingTop: '80px' }}> {/* Ajoutez ici un padding-top */}
           {children}
+        </div>
       </body>
     </html>
   );

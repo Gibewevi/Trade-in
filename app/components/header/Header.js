@@ -13,9 +13,9 @@ export default async function Header() {
                     </Link>
                     <nav className="flex flex-row items-center gap-x-[70px] ">
                         <Link href="/lessons/definition-des-cryptomonnaies"><span className="text-slate-500 hover:text-slate-900 hover:underline hover:underline-offset-4">Lessons</span></Link>
-                        <Link href="/account">
-                            {isConnected && <span className="text-slate-500 hover:text-slate-900 hover:underline hover:underline-offset-4">Account</span>}
-                        </Link>
+                        {isConnected && <Link href="/account/details">
+                            <span className="text-slate-500 hover:text-slate-900 hover:underline hover:underline-offset-4">Account</span>
+                        </Link>}
                         {/* <Link href="/actuality"><span className="text-slate-500 hover:text-slate-900 hover:underline hover:underline-offset-4">Actuality</span></Link> */}
                         {/* <Link href="/challenges"><span className="text-slate-500 hover:text-slate-900 hover:underline hover:underline-offset-4">Challenges</span></Link> */}
                         {/* <Link href="/airdrops"><span className="text-slate-500 hover:text-slate-900 hover:underline hover:underline-offset-4">Airdrops</span></Link> */}
@@ -28,12 +28,15 @@ export default async function Header() {
                         {isConnected ? <div className="flex flex-row"><img src='/images/CarbonLogout.svg' className="w-[25px]" />
                             <Link href="/account">
                                 <span className="text-md text-slate-900 font-semibold ml-2 hover:text-slate-900 hover:underline hover:underline-offset-4">Logout</span>
-                            </Link></div> : <div><img src='/images/CarbonUser.svg' className="w-[25px]" />
-                            <Link href="/login">
-                                <span className="text-md text-slate-900 font-semibold ml-2">Login</span>
-                            </Link></div>}
+                            </Link></div> : 
+                            <div className="flex flex-row">
+                            <img src='/images/CarbonUser.svg' className="w-[25px]" />
+                                <Link href="/login">
+                                    <span className="text-md text-slate-900 font-semibold ml-2">Login</span>
+                                </Link>
+                            </div>}
                     </div>
-                    {isConnected ? <Link href="/join">
+                    {isConnected ? <Link href="/discord">
                         <button className="group h-[40px] bg-[#705DF2] p-4 rounded-xl flex gap-x-2 justify-center items-center overflow-hidden relative">
                             <img src='/images/CarbonLogoDiscord.svg' className="w-[30px]" />
                             <span className="z-10 text-slate-100 text-md font-bold">Discord</span>

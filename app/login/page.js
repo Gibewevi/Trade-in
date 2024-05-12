@@ -14,10 +14,12 @@ export default function Page() {
         setCredentials(credentials);
         try {
             const login = await userService.login(credentials);
-            console.log('login : ', login.body.data.success);
             if (login.body.data.success) {
-                window.location.reload();
-            } else {
+                // Ajout d'un timestamp comme paramètre d'URL pour forcer le rechargement
+                window.location.href = '/';
+            }
+
+            else {
                 setErrorLogin(login.body.message);
             }
         } catch (error) {
@@ -28,7 +30,7 @@ export default function Page() {
 
     return (
         <div className="flex items-center justify-center w-full h-screen bg-slate-200">
-            <LoginForm handleLogin={handleLogin} errorLogin={errorLogin}/>
+            <LoginForm handleLogin={handleLogin} errorLogin={errorLogin} />
         </div>
     )
 }
