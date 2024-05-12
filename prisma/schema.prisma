@@ -1,0 +1,120 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AccessLevel {
+  FREE
+  PREMIUM
+}
+
+model user {
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  password  String
+  billings  Billing[] 
+  
+  @@map("users")
+}
+
+model Formation {
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String?
+  price       Int       // Prix en centimes pour éviter les problèmes de virgule flottante
+  active      Boolean   @default(true)
+  chapters    chapter[]
+  billings    Billing[] // Relation correctement définie
+
+  @@map("formations")
+}
+
+
+model Billing {
+  id          Int       @id @default(autoincrement())
+  userId      Int
+  user        user      @relation(fields: [userId], references: [id])
+  formationId Int
+  formation   Formation @relation(fields: [formationId], references: [id])
+  amount      Int       // Montant facturé en centimes
+  billingDate DateTime  @default(now())
+  line1       String?   // Rue et numéro
+  line2       String?   // Informations supplémentaires d'adresse
+  city        String?   // Ville
+  postalCode  String?   // Code postal
+  state       String?   // État ou région
+  country     String?   // Pays
+
+  @@map("billings")
+}
+
+
+model chapter {
+ id          Int       @id @default(autoincrement())
+ chapterId   Int       @unique
+ title       String
+ description String
+ lessons     lesson[]  @relation("chapterToLesson")
+ duration    Int       @default(0)
+ formationId Int
+ formation   Formation @relation(fields: [formationId], references: [id])
+
+ @@map("chapters")
+}
+
+model lesson {
+ id           Int        @id @default(autoincrement())
+ lessonId     Int        @unique
+ title        String
+ slug         String     @unique
+ contentUrl   String
+ thumbnailUrl String
+ isNew        Boolean    @default(true)
+ createdAt    DateTime   @default(now())
+ chapterId    Int
+ chapter      chapter    @relation("chapterToLesson", fields: [chapterId], references: [chapterId])
+ accessLevel  AccessLevel
+ isFree       Boolean    @default(false)
+ duration     Int        @default(0)
+
+ @@map("lessons")
+}
+
+model Tweet {
+  id          Int      @id @default(autoincrement())
+  tweetId     String   @unique 
+  content     String  
+  publishedAt DateTime 
+  createdAt   DateTime @default(now()) 
+
+  @@map("tweets") 
+}
+
+
+
+model Category {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String?
+  prompt      String?  
+  articles    Article[] @relation("categoryToArticle")
+  
+  @@map("categories")
+}
+
+model Article {
+  id          Int       @id @default(autoincrement())
+  title       String
+  content     String
+  htmlContent String
+  publishedAt DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  categoryId  Int
+  category    Category  @relation("categoryToArticle", fields: [categoryId], references: [id])
+  
+  @@map("articles")
+}
