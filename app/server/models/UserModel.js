@@ -1,8 +1,27 @@
 import { PrismaClient } from '@prisma/client';
+
 import bcrypt from 'bcrypt';
 import { randomBytes } from 'crypto';
 
 const prisma = new PrismaClient();
+
+// Fonction qui récupère isVerified de la table user par l'email
+const isAccountVerified = async (email) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        email: email,
+      },
+      select: {
+        isVerified: true,
+      },
+    });
+    return user ? user.isVerified : false;
+  } catch (error) {
+    console.error("Error checking if account is verified:", error);
+    throw error;
+  }
+};
 
 // Fonction pour vérifier que l'utilisateur existe par son email
 const findUserByEmail = async (email) => {
@@ -38,7 +57,8 @@ const addNewUser = async (user) => {
 };
 const userModel = {
  addNewUser,
- findUserByEmail
+ findUserByEmail,
+ isAccountVerified
 };
 
 export default userModel;

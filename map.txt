@@ -1,0 +1,23 @@
+->form email
+    -> vérification email existe deja
+->create order 
+    -> geolocalisation du client
+    -> return devise
+    -> return prix + tva
+-> form checkout
+    -> 
+
+
+
+-> paiement
+    -> recuperer montant + devise + pays de la CB
+-> creation du compte + mail
+-> premiere connexion -> formulaire adresse + generer la facture
+
+
+-> client : renseigner email 
+    -> server : récupérer le pays (ipstack)
+              : récupérer la devise du pays
+              : convertir devise -> devise client (API currencyapi)
+              : enregistrer les informations dans le customer
+              : retourner le prix dans la devise du client 

@@ -1,43 +1,50 @@
 import Stripe from "stripe";
+import userController from "@/app/server/controllers/UserController";
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-const calculateOrderAmount = (items) => {
- // Remplacez cette constante par un calcul du montant de la commande
- return 9500;
-};
-
 export async function POST(request) {
- try {
+  // Récupérer l'adresse IP du client
+  // const ipAddress = request.headers.get('X-Forwarded-For') || request.socket.remoteAddress;
+  const ipAddress = "64.56.236.190";
+  const amount = '9500';
+  try {
+
+    const { convertedAmount,exchangeRate,countryCode,currencyCode,regionCode } = await userController.getExchangeRateAndPriceByIp(ipAddress, amount);
+
     const { items, email } = await request.json();
-    
-    // Créez un client Stripe avec l'email de l'utilisateur
     const customer = await stripe.customers.create({
       email: email,
+      metadata: {
+        email: email.toString(),
+        amount: amount.toString(),
+        amount_devise: convertedAmount.toString(),
+        exchange_rate: exchangeRate.toString(),
+        countryCode: countryCode.toString(),
+        regionCode: regionCode.toString(),
+        currencyCode: currencyCode.toString(),
+      }
     });
 
-    // Utilisez l'ID du client pour le PaymentIntent
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: calculateOrderAmount(items),
-      currency: "eur",
-      customer: customer.id, // Utilisez l'ID du client ici
-      automatic_payment_methods: {
-        enabled: true,
-      },
+      amount: amount,
+      currency: 'USD',
+      customer: customer.id,
+      setup_future_usage: "off_session",
+      automatic_payment_methods: { enabled: true }
     });
 
-    return new Response(JSON.stringify({ clientSecret: paymentIntent.client_secret }), {
+    console.log('paymentIntent: ', paymentIntent);
+
+    return new Response(JSON.stringify({ clientSecret: paymentIntent.client_secret, convertedAmount : convertedAmount, currencyCode : currencyCode }), {
       status: 200,
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Content-Type': 'application/json' }
     });
- } catch (error) {
+  } catch (error) {
     console.error('Erreur:', error);
     return new Response(JSON.stringify({ error: "Une erreur est survenue." }), {
       status: 500,
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Content-Type': 'application/json' }
     });
- }
+  }
 }

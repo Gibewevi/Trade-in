@@ -1,12 +1,18 @@
+// page.js
 'use client'
 import { useState } from "react";
 import { useRouter } from 'next/navigation'
 import LoginForm from "../components/login/LoginForm";
+import AddressForm from "../components/login/AdressForm";
 import userService from "../service/user";
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
+
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 
 export default function Page() {
-
-    const router = useRouter()
+    const router = useRouter();
+    const [form, setForm] = useState('accountVerified');
     const [credentials, setCredentials] = useState();
     const [errorLogin, setErrorLogin] = useState(null);
 
@@ -14,12 +20,15 @@ export default function Page() {
         setCredentials(credentials);
         try {
             const login = await userService.login(credentials);
-            if (login.body.data.success) {
-                // Ajout d'un timestamp comme paramètre d'URL pour forcer le rechargement
-                window.location.href = '/';
-            }
-
-            else {
+            console.log('login : ', login);
+            console.log('login success : ', login.data.success);
+            if (login.data.success) {
+                if (login.data.isAccountVerified) {
+                    window.location.href = '/';
+                } else {
+                    setForm('accountVerified');
+                }
+            } else {
                 setErrorLogin(login.body.message);
             }
         } catch (error) {
@@ -28,9 +37,37 @@ export default function Page() {
         }
     };
 
+    const handleAddressSubmit = async (addressData) => {
+        try {
+            console.log('adress : ', addressData);
+            // const response = await fetch('/api/save-address', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //     },
+            //     body: JSON.stringify(addressData),
+            // });
+
+            // if (!response.ok) {
+            //     throw new Error('Failed to save address');
+            // }
+
+            // const result = await response.json();
+            // console.log('Address saved:', result);
+        } catch (error) {
+            // console.error('Error saving address:', error);
+        }
+    };
+
     return (
-        <div className="flex items-center justify-center w-full h-screen bg-slate-200">
-            <LoginForm handleLogin={handleLogin} errorLogin={errorLogin} />
-        </div>
+        <Elements stripe={stripePromise}>
+            <div className="flex items-center justify-center w-full h-screen bg-slate-200">
+                {form === 'login' ? (
+                    <LoginForm handleLogin={handleLogin} errorLogin={errorLogin} />
+                ) : (
+                    <AddressForm onSubmit={handleAddressSubmit} />
+                )}
+            </div>
+        </Elements>
     )
 }
