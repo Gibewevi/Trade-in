@@ -12,7 +12,7 @@ const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
 
 export default function Page() {
     const router = useRouter();
-    const [form, setForm] = useState('accountVerified');
+    const [form, setForm] = useState('login');
     const [credentials, setCredentials] = useState();
     const [errorLogin, setErrorLogin] = useState(null);
 
@@ -39,23 +39,33 @@ export default function Page() {
 
     const handleAddressSubmit = async (addressData) => {
         try {
-            console.log('adress : ', addressData);
-            // const response = await fetch('/api/save-address', {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //     },
-            //     body: JSON.stringify(addressData),
-            // });
+            console.log('addressData api : ', addressData);
 
-            // if (!response.ok) {
-            //     throw new Error('Failed to save address');
-            // }
+            // Ajoutez l'email des informations d'identification à l'objet addressData
+            if (credentials && credentials.email) {
+                addressData.email = credentials.email;
+            }
 
-            // const result = await response.json();
-            // console.log('Address saved:', result);
+            const response = await fetch('/api/account/billing-register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(addressData),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to save address');
+            }
+
+            const user = await response.json();
+            if (user.accountVerified) {
+                window.location.href = '/';
+            } else {
+                console.log('User account is not verified:', result);
+            };
         } catch (error) {
-            // console.error('Error saving address:', error);
+            console.error('Error saving address:', error);
         }
     };
 

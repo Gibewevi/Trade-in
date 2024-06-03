@@ -5,6 +5,14 @@ import { randomBytes } from 'crypto';
 
 const prisma = new PrismaClient();
 
+// Fonction qui valide ou non le compte de l'utilisateur
+const setAccountVerified = async (email, isVerified) => {
+  return await prisma.user.update({
+    where: { email: email },
+    data: { isVerified: isVerified },
+  });
+}
+
 // Fonction qui récupère isVerified de la table user par l'email
 const isAccountVerified = async (email) => {
   try {
@@ -58,7 +66,8 @@ const addNewUser = async (user) => {
 const userModel = {
  addNewUser,
  findUserByEmail,
- isAccountVerified
+ isAccountVerified,
+ setAccountVerified
 };
 
 export default userModel;

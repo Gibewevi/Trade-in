@@ -1,14 +1,16 @@
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
-async function newBilling(user) {
+async function saveBillingInfo(billing) {
+    console.log('model billing : ', billing);
     // Récupérer l'utilisateur par email pour obtenir l'ID
     const userData = await prisma.user.findUnique({
         where: {
-            email: user.email
+            email: billing.email
         }
     });
-
+    console.log('BillingModel  : ', userData);
+    
     if (!userData) {
         throw new Error('User not found');
     }
@@ -17,23 +19,21 @@ async function newBilling(user) {
     const billingEntry = await prisma.billing.create({
         data: {
             userId: userData.id, // Utiliser l'ID trouvé
-            formationId: user.formationId,
-            amount: user.amount, // Montant spécifié en centimes
-            billingDate: user.billingDate, // Date de facturation, doit être un objet Date valide
-            line1: user.line1, // Rue et numéro
-            line2: user.line2, // Complément d'adresse
-            city: user.city, // Ville
-            postalCode: user.postalCode, // Code postal
-            state: user.state, // État ou région
-            country: user.country // Pays
+            fullName: billing.fullName, // Nom complet de l'utilisateur
+            billingAddressLine1: billing.line1, // Rue et numéro
+            billingAddressLine2: billing.line2, // Complément d'adresse
+            billingCity: billing.city, // Ville
+            billingState: billing.state, // État ou région
+            billingPostalCode: billing.postal_code, // Code postal
+            billingCountry: billing.country // Pays
         }
     });
+    console.log('saveBillingInfo billingEntry : ', billingEntry);
     return billingEntry;
 }
 
-
 const billingModel = {
-    newBilling
+    saveBillingInfo
 };
 
 export default billingModel;

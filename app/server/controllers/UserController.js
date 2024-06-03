@@ -8,6 +8,13 @@ import jwt from 'jsonwebtoken';
 const currencyApi = new CurrencyAPI(process.env.CURRENCY_API_KEY);
 
 
+async function setAccountVerified(email, isVerified){
+    console.log('userController setAccountVerified: ',email, ' ', isVerified);
+    // const accountVerified = await userModel.setAccountVerified(email, isVerified);
+    const accountVerified = await userModel.setAccountVerified(email, isVerified);
+    console.log('userController setAccountVerified accountVerified: ',accountVerified);
+    return accountVerified;
+};
 
 // Vérifier que le compte de l'utilisateur est actif.
 async function isAccountVerified(email){
@@ -184,7 +191,8 @@ const userController = {
     authenticateUser,
     getExchangeRateAndPriceByIp,
     isUserInCanadaByCountryCode,
-    isAccountVerified
+    isAccountVerified,
+    setAccountVerified
 };
 
 export default userController;

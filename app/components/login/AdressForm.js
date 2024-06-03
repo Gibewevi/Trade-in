@@ -34,10 +34,22 @@ const AddressForm = ({ onSubmit }) => {
             <span className='text-[#8b7bf3] font-black text-3xl'>Dernière étape!</span>
             <span className='text-[#8b7bf3] font-medium text-md'>Accédez à Bitlearn en validant votre compte.</span>
             <form onSubmit={handleSubmitForm} className=''>
-                <AddressElement 
-                    options={{ mode: 'billing' }} 
+                <AddressElement
+                    options={{ mode: 'billing' }}
                     onChange={(event) => {
-                        setAddress(event.value.address);
+                        // Récupérez l'objet d'adresse complet
+                        const addressObj = event.value.address;
+                        console.log(' addressObj ', addressObj);
+                        // Récupérez le fullname
+                        const fullName = event.value.name;
+                        console.log(' fullName ', fullName);
+                        // Ajoutez le fullname à l'objet d'adresse
+                        addressObj.fullName = fullName; // Utilisation de la notation point
+                        console.log(' addressObj ', addressObj);
+                        // Ou, alternativement, vous pouvez utiliser la notation entre crochets
+                        // addressObj['fullname'] = fullName;
+
+                        setAddress(addressObj); // Mettez à jour l'état avec l'objet d'adresse complet, maintenant incluant le fullname
                         setIsComplete(event.complete);
                         if (event.complete) {
                             setError('');

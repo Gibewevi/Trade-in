@@ -9,6 +9,7 @@ export async function POST(request) {
     try {
         switch (event.type) {
             case 'payment_intent.succeeded':
+                console.log('payment_intent.succeeded');
                 const paymentIntent = event.data.object;
                 const customerId = paymentIntent.customer;
                 const customer = await stripe.customers.retrieve(customerId);
@@ -19,8 +20,9 @@ export async function POST(request) {
                     password: hashedPassword,
                     email: customer.email,
                 };
-
+                console.log('user : ',user);
                 const userRegister = await userController.addNewUser(user);
+                console.log('userRegister : ',userRegister)
                 const mail = await mailController.sendStartPassword(user.email, initialPassword);
                 console.log('mail : ', mail);
                 const invoice = await invoiceController.newInvoice(customer.metadata);
