@@ -1,5 +1,5 @@
 'use client'
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 
@@ -10,22 +10,35 @@ import CheckoutForm from "./CheckoutForm";
 // This is your test publishable API key.
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 
-export default function Checkout({email}) {
-  const [clientSecret, setClientSecret] = React.useState("");
+export default function Checkout({ email }) {
+  const [clientSecret, setClientSecret] = useState(null);
+  const [convertedAmount, setConvertedAmount] = useState(null);
+  const [currencyCode, setCurrencyCode] = useState(null);
 
-  React.useEffect(() => {
-    // Create PaymentIntent as soon as the page loads
+  useEffect(() => {
+    if (!email || clientSecret) return;
+
+    console.log("Creating PaymentIntent");
     fetch("/api/create-payment-intent", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-      items: [{ id: "xl-tshirt" }],
-      email: email, 
-    }),
+        items: [{ id: "xl-tshirt" }],
+        email: email,
+      }),
     })
       .then((res) => res.json())
-      .then((data) => setClientSecret(data.clientSecret));
-  }, []);
+      .then((data) => {
+        setClientSecret(data.clientSecret);
+        setConvertedAmount(data.convertedAmount);
+        setCurrencyCode(data.currencyCode);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+
+  }, [email, clientSecret]);
+
 
   const appearance = {
     theme: 'stripe',
@@ -39,7 +52,7 @@ export default function Checkout({email}) {
     <>
       {clientSecret && (
         <Elements options={options} stripe={stripePromise}>
-          <CheckoutForm />
+          <CheckoutForm convertedAmount={convertedAmount} currencyCode={currencyCode} />
         </Elements>
       )}
     </>

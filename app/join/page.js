@@ -8,6 +8,8 @@ export default function Page() {
     const [email, setEmail] = useState();
 
     const handleJoin = (email) => {
+        // s'execute bien une seule fois
+        console.log("Setting email:", email);
         setEmail(email);
         setStepJoin('checkout');
     };

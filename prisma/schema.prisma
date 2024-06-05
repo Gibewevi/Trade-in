@@ -13,12 +13,68 @@ enum AccessLevel {
 }
 
 model user {
-  id        Int       @id @default(autoincrement())
-  email     String    @unique
-  password  String
-  billings  Billing[] 
-  
+  id          Int       @id @default(autoincrement())
+  email       String    @unique
+  password    String
+  isVerified  Boolean   @default(false)
+
+  billing     billing?
+  invoices    invoice[]
+
   @@map("users")
+}
+
+
+model billing {
+  id                   Int       @id @default(autoincrement())
+  userId               Int       @unique
+  fullName             String
+  billingAddressLine1  String
+  billingAddressLine2  String?
+  billingCity          String
+  billingState         String
+  billingPostalCode    String
+  billingCountry       String
+
+  user user            @relation(fields: [userId], references: [id])
+
+  @@map("billings")
+}
+
+model devise {
+  id          Int    @id @default(autoincrement())
+  country     String
+  countryCode String
+  currency    String
+  code        String
+}
+
+model invoice {
+  id            Int       @id @default(autoincrement())
+  userId        Int
+  date          DateTime  @default(now())
+  totalAmount   Float     // Montant TTC
+  amountHt      Float?    // Montant HT, calculé après
+  tps           Float?    // Montant de la TPS, calculé après
+  tvp           Float?    // Montant de la TVP, calculé après
+  taxRate       Float?    // Taux de taxe total
+  currency      String
+  paymentStatus String
+
+  user user     @relation(fields: [userId], references: [id])
+
+  @@map("invoices")
+}
+
+model tax_rate {
+  id                 Int       @id @default(autoincrement())
+  province           String
+  abbreviation       String
+  tps                Float
+  tvp                Float
+  totalTax           Float
+
+  @@map("tax_rates")
 }
 
 model Formation {
@@ -28,30 +84,9 @@ model Formation {
   price       Int       // Prix en centimes pour éviter les problèmes de virgule flottante
   active      Boolean   @default(true)
   chapters    chapter[]
-  billings    Billing[] // Relation correctement définie
-
+  
   @@map("formations")
 }
-
-
-model Billing {
-  id          Int       @id @default(autoincrement())
-  userId      Int
-  user        user      @relation(fields: [userId], references: [id])
-  formationId Int
-  formation   Formation @relation(fields: [formationId], references: [id])
-  amount      Int       // Montant facturé en centimes
-  billingDate DateTime  @default(now())
-  line1       String?   // Rue et numéro
-  line2       String?   // Informations supplémentaires d'adresse
-  city        String?   // Ville
-  postalCode  String?   // Code postal
-  state       String?   // État ou région
-  country     String?   // Pays
-
-  @@map("billings")
-}
-
 
 model chapter {
  id          Int       @id @default(autoincrement())
@@ -93,8 +128,6 @@ model Tweet {
 
   @@map("tweets") 
 }
-
-
 
 model Category {
   id          Int      @id @default(autoincrement())
