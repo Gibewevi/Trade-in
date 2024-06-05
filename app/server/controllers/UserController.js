@@ -7,19 +7,21 @@ import jwt from 'jsonwebtoken';
 
 const currencyApi = new CurrencyAPI(process.env.CURRENCY_API_KEY);
 
-
-async function setAccountVerified(email, isVerified){
-    console.log('userController setAccountVerified: ',email, ' ', isVerified);
-    // const accountVerified = await userModel.setAccountVerified(email, isVerified);
+async function setAccountVerified(email, isVerified) {
     const accountVerified = await userModel.setAccountVerified(email, isVerified);
-    console.log('userController setAccountVerified accountVerified: ',accountVerified);
     return accountVerified;
 };
 
+
+const verifyJWTVerifiedAccount = (token) => {
+    const JWT_SECRET = process.env.JWT_SECRET;
+    return jwt.verify(token, JWT_SECRET);
+}
+
 // Vérifier que le compte de l'utilisateur est actif.
-async function isAccountVerified(email){
+async function isAccountVerified(email) {
     const isVerified = await userModel.isAccountVerified(email);
-  return isVerified;
+    return isVerified;
 }
 // Checks if the user is located in Canada based on their billing address.
 
@@ -38,25 +40,14 @@ async function fetchUserLocationByIp(ip) {
     return data;
 }
 
-/**
- * Récupère la devise associée à un code pays.
- * @param {string} countryCode - Le code pays.
- * @returns {Object} La devise correspondant au code pays.
- * @throws {Error} Si aucune devise n'est trouvée pour le code pays donné.
- */
+// Récupère la devise associée à un code pays.
 async function getCurrencyByCountryCode(countryCode) {
     const currency = await deviseModel.getCurrencyByCountryCode(countryCode);
     if (!currency) throw new Error('Currency not found for the given country code');
     return currency;
 }
 
-/**
- * Récupère le taux de change entre deux devises en utilisant l'API Currency.
- * @param {string} baseCurrency - La devise de base (par exemple, 'USD').
- * @param {string} targetCurrency - La devise cible (par exemple, 'EUR').
- * @returns {number} Le taux de change entre la devise de base et la devise cible.
- * @throws {Error} Si la récupération du taux de change échoue.
- */
+// Récupère le taux de change entre deux devises en utilisant l'API Currency.
 async function getExchangeRate(baseCurrency, targetCurrency) {
     console.log('Fetching exchange rate for:', baseCurrency, 'to', targetCurrency);
     const currencyExchangeRateAPI = await currencyApi.latest({
@@ -71,12 +62,7 @@ async function getExchangeRate(baseCurrency, targetCurrency) {
     return exchangeRate;
 }
 
-/**
- * Calcule le montant converti dans une devise cible en utilisant le taux de change.
- * @param {number} amount - Le montant en devise de base.
- * @param {number} exchangeRate - Le taux de change entre la devise de base et la devise cible.
- * @returns {number} Le montant converti dans la devise cible.
- */
+// Calcule le montant converti dans une devise cible en utilisant le taux de change.
 function calculateConvertedAmount(amount, exchangeRate) {
     const amountInDollars = amount / 100;
     const convertedAmount = amountInDollars * exchangeRate;
@@ -85,13 +71,7 @@ function calculateConvertedAmount(amount, exchangeRate) {
     return roundedConvertedAmount.toFixed(2);
 }
 
-/**
- * Récupère le taux de change et calcule le prix de l'article en fonction de l'adresse IP de l'utilisateur.
- * @param {string} ip - L'adresse IP de l'utilisateur.
- * @param {number} amount - Le montant de l'article en dollars américains (USD).
- * @returns {Object} Un objet contenant le taux de change, le montant converti et le code pays.
- * @throws {Error} Si la récupération des informations échoue.
- */
+// Récupère le taux de change et calcule le prix de l'article en fonction de l'adresse IP de l'utilisateur.
 async function getExchangeRateAndPriceByIp(ip, amount) {
     const location = await fetchUserLocationByIp(ip);
     const countryCode = location.country_code;
@@ -117,33 +97,18 @@ async function getExchangeRateAndPriceByIp(ip, amount) {
     };
 }
 
-// vérifier que l'utilisateur existe par le mail
-async function authenticateUser(email, password) {
-    const user = await userModel.findUserByEmail(email);
-    if (user) {
-        const isMatch = await comparePasswords(password, user.password);
-        if (isMatch) {
-            // Création du JWT
-            const token = createJWTtoken(user);
-            return {
-                success: true,
-                message: "Connexion réussie.",
-                token: token
-            };
-        } else {
-            return {
-                success: false,
-                message: "Mot de passe incorrect."
-            };
-        }
-    } else {
-        return {
-            success: false,
-            message: "Aucun utilisateur trouvé avec cet email."
-        };
+// Fonction pour créer un JWT pour vérifier l'account
+function createVerificationJWTbyEmail(email) {
+    if (!email) {
+        throw new Error("Email is required to generate a verification token.");
     }
-}
 
+    return jwt.sign(
+        { email: email, tokenType: 'verification' },
+        process.env.JWT_SECRET,
+        { expiresIn: '15m' }
+    );
+}
 // Fonction pour créer un JWT
 function createJWTtoken(user) {
     return jwt.sign(
@@ -151,6 +116,42 @@ function createJWTtoken(user) {
         process.env.JWT_SECRET,
         { expiresIn: '1h' }
     );
+}
+
+// vérifier que l'utilisateur existe par le mail
+async function authenticateUser(email, password) {
+    let user;
+    try {
+        user = await userModel.findUserByEmail(email);
+    } catch (err) {
+        console.error('Error finding user by email:', err);
+        return {
+            success: false,
+            message: 'Aucun utilisateur trouvé avec cet email.'
+        };
+    }
+    const isMatch = await comparePasswords(password, user.password);
+    if (!isMatch) {
+        console.log('Password incorrect');
+        return {
+            success: false,
+            message: 'Mot de passe incorrect.'
+        };
+    }
+    if (user.isVerified) {
+        const token = createJWTtoken(user);
+        return {
+            success: true,
+            message: "Connexion réussie.",
+            token: token
+        };
+    } else {
+        return {
+            email: user.email,
+            success: true,
+            message: "Account not verified."
+        };
+    }
 }
 
 // Fonction pour comparer le mot de passe fourni avec celui enregistré
@@ -192,7 +193,11 @@ const userController = {
     getExchangeRateAndPriceByIp,
     isUserInCanadaByCountryCode,
     isAccountVerified,
-    setAccountVerified
+    setAccountVerified,
+    createVerificationJWTbyEmail,
+    verifyJWTVerifiedAccount
 };
 
 export default userController;
+
+

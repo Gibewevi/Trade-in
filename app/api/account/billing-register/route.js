@@ -4,6 +4,11 @@ import cookie from 'cookie'; // Importer la bibliothèque de gestion des cookies
 
 export async function POST(request) {
   try {
+    //vérifier le token jwt pour récupérér le mail de l'utilisateur
+     const { verificationToken } = cookie.parse(request.headers.get('cookie') || '');
+     const userTokenVerified = userController.verifyJWTVerifiedAccount(verificationToken);
+     console.log('userTokenVerified : ', userTokenVerified);
+
     const billingData = await request.json();
     console.log('Received billing data:', billingData);
     
@@ -18,6 +23,9 @@ export async function POST(request) {
     if (!accountVerified) {
       throw new Error('Failed to verify account');
     }
+
+    // vérifier le pays et la province pour vérifier le calcul des taxes
+    // creer le token et retourner le cookie sécurisé
 
     // Retourne dans la réponse l'email, et le accountVerified
     return new Response(

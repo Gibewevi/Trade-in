@@ -5,6 +5,7 @@ import { randomBytes } from 'crypto';
 
 const prisma = new PrismaClient();
 
+
 // Fonction qui valide ou non le compte de l'utilisateur
 const setAccountVerified = async (email, isVerified) => {
   return await prisma.user.update({
@@ -13,7 +14,6 @@ const setAccountVerified = async (email, isVerified) => {
   });
 }
 
-// Fonction qui récupère isVerified de la table user par l'email
 const isAccountVerified = async (email) => {
   try {
     const user = await prisma.user.findUnique({
@@ -49,7 +49,6 @@ const findUserByEmail = async (email) => {
 const addNewUser = async (user) => {
   console.log('user model : ', user);
   try {
-    // Crée un nouvel utilisateur dans la base de données
     const newUser = await prisma.user.create({
       data: {
         email: user.email,
@@ -59,10 +58,11 @@ const addNewUser = async (user) => {
     return newUser;
   } catch (error) {
     console.error("Error adding new user:", error);
-    // Gérer l'erreur ou la relancer selon les besoins de votre application
     throw error;
   }
 };
+
+
 const userModel = {
  addNewUser,
  findUserByEmail,

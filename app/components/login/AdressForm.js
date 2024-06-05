@@ -8,6 +8,8 @@ const AddressForm = ({ onSubmit }) => {
     const [address, setAddress] = useState(null);
     const [isComplete, setIsComplete] = useState(false);
 
+
+
     const handleSubmitForm = async (event) => {
         event.preventDefault();
 
