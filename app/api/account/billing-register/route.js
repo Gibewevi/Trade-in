@@ -4,43 +4,91 @@ import userController from '@/app/server/controllers/UserController';
 import jwtController from '@/app/server/controllers/JwtController';
 import cookie from 'cookie'; // Importer la bibliothèque de gestion des cookies
 
+// Récupère l'utilisateur à partir de la requête
+async function getUserFromRequest(request) {
+  const { billingRegisterJWT } = cookie.parse(request.headers.get('cookie') || '');
+  const verifiedUserToken = jwtController.verifyJWTVerifiedAccount(billingRegisterJWT);
+  const user = await userController.getUserByEmail(verifiedUserToken.email);
+  console.log('user', user);
+  return user;
+}
+
+// Enregistre les informations de facturation
+async function saveBillingInformation(billingData) {
+  const savedBilling = await billingController.saveBillingInfo(billingData);
+  if (!savedBilling) {
+    throw new Error('Failed to save billing information');
+  }
+}
+
+// Vérifie le compte utilisateur
+async function setAccountVerified(email) {
+  const accountVerified = await userController.setAccountVerified(email, true);
+  if (!accountVerified) {
+    throw new Error('Failed to verify account');
+  }
+}
+
+// Crée la réponse HTTP avec les données et le cookie JWT
+function createResponse(data, jwtCookie) {
+  return new Response(
+    JSON.stringify(data),
+    {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+        'Set-Cookie': jwtCookie,
+      },
+    }
+  );
+}
+
+// Crée la réponse HTTP en cas d'erreur
+function createErrorResponse(error) {
+  console.error('Error processing request:', error);
+  return new Response(
+    JSON.stringify({
+      status: 500,
+      message: 'Server error',
+      error: error.message,
+    }),
+    {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    }
+  );
+}
+
 export async function POST(request) {
   try {
-    console.log('billing register');
-    //vérifier le token jwt pour récupérér le mail de l'utilisateur
-    const { billingRegisterJWT } = cookie.parse(request.headers.get('cookie') || '');
-    const userTokenVerified = jwtController.verifyJWTVerifiedAccount(billingRegisterJWT);
-    const user = await userController.getUserByEmail(userTokenVerified.email);
+    // Récupère l'utilisateur à partir de la requête
+    const user = await getUserFromRequest(request);
 
+    // Récupère les données de facturation du corps de la requête
     const billingData = await request.json();
-    console.log('Received billing data:', billingData);
 
-    // Enregistre le formulaire adresse par l'email 
-    const savedBilling = await billingController.saveBillingInfo(billingData);
-    if (!savedBilling) {
-      throw new Error('Failed to save billing information');
-    }
+    // Enregistre les informations de facturation
+    await saveBillingInformation(billingData);
+
+    // Récupère la première facture de l'utilisateur
     const invoiceData = await invoiceController.getFirstInvoiceByUserId(user.id);
 
+    // Met à jour les taxes de la facture en fonction des informations de facturation
+    await invoiceController.UpdateInvoiceTaxByBillingRegister(invoiceData, billingData);
 
-    // vérifier le pays et la province pour vérifier le calcul des taxes
-    const BillingMatchInvoice = await invoiceController.UpdateInvoiceTaxByBillingRegister(invoiceData, billingData);
+    // Vérifie le compte utilisateur
+    await setAccountVerified(billingData.email);
 
-    // Valide le profil de l'utilisateur
-    const accountVerified = await userController.setAccountVerified(billingData.email, true);
-    if (!accountVerified) {
-      throw new Error('Failed to verify account');
-    }
-
-    // creer le token et retourner le cookie sécurisé
+    // Crée le cookie JWT pour l'utilisateur
     const jwtCookie = jwtController.createJWTtoken(user, 'loginJWT', 3600);
-    // Ajouter le cookie à l'en-tête de la réponse
+
+    // Prépare les en-têtes de réponse
     const responseHeaders = {
       'Content-Type': 'application/json',
       'Set-Cookie': jwtCookie // Ajouter le cookie à l'en-tête Set-Cookie
     };
 
-    // Retourne dans la réponse l'email, et le accountVerified
+    // Retourne la réponse HTTP avec l'email et le statut de vérification du compte
     return new Response(
       JSON.stringify({
         email: billingData.email,
@@ -53,18 +101,7 @@ export async function POST(request) {
     );
 
   } catch (error) {
-    // Gérer les exceptions éventuelles, comme les erreurs de serveur
-    console.error('Error processing request:', error);
-    return new Response(
-      JSON.stringify({
-        status: 500,
-        message: 'Server error',
-        error: error.message,
-      }),
-      {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' },
-      }
-    );
+    // Gère les exceptions éventuelles, comme les erreurs de serveur
+    return createErrorResponse(error);
   }
 }
