@@ -8,7 +8,7 @@ const mailerSend = new MailerSend({
 
 // fonction qui envoie un mail et qui prend en param (email, password)
 async function sendStartPassword(emailAddress, password) {
-    const sender = new Sender("votre-choix@trial-x2p0347ywzk4zdrn.mlsender.net", "BitLearn");
+    const sender = new Sender("contact@bitlearn.fr", "BitLearn");
     const recipient = new Recipient(emailAddress, "Utilisateur de BitLearn");
 
     const emailParams = new EmailParams()

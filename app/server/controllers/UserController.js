@@ -30,7 +30,7 @@ async function authenticateUser(email, password) {
             return { success: false, message: 'Mot de passe incorrect.' };
         }
         if (user.isVerified) {
-            return { success: true, message: "Connexion réussie."};
+            return { id: user.id, email: user.email, success: true, message: "Connexion réussie."};
         } else {
             return { email: user.email, success: true, message: "Account not verified." };
         }

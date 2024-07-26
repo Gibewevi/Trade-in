@@ -5,7 +5,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 // Fonction pour créer un JWT d'authentification
 function createJWTtoken(user, tokenName, maxAgeJwt) {
     const token = jwt.sign(
-        { userId: user.id, email: user.email },
+        { id: user.id, email: user.email },
         JWT_SECRET,
         { expiresIn: '1h' }
     );

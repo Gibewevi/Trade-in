@@ -7,7 +7,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 export async function POST(request) {
   // Récupérer l'adresse IP du client
   // const ipAddress = request.headers.get('X-Forwarded-For') || request.socket.remoteAddress;
-  const ipAddress = "90.93.131.147";
+  const ipAddress = "184.144.160.222";
   const amount = '9500';
   try {
 

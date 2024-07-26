@@ -9,6 +9,7 @@ export async function POST(request) {
 
         // Appeler la méthode de connexion du UserController
         const user = await userController.authenticateUser(credentials.email, credentials.password);
+        
         // Vérifier si l'utilisateur est trouvé et authentifié
         if (user.success) {
             // Vérifier que l'utilisateur est vérifié
