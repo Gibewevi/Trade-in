@@ -9,8 +9,11 @@ import CheckoutForm from "./CheckoutForm";
 // recreating the Stripe object on every render.
 // This is your test publishable API key.
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
+console.log(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
+console.log('stripePromise : ', stripePromise);
 
-export default function Checkout({ email }) {
+export default function Checkout({ email, handleSetStepJoin  }) {
+  const [stripeIsLoaded, setStripeIsLoaded] = useState(false);
   const [clientSecret, setClientSecret] = useState(null);
   const [convertedAmount, setConvertedAmount] = useState(null);
   const [currencyCode, setCurrencyCode] = useState(null);
@@ -32,6 +35,8 @@ export default function Checkout({ email }) {
         setClientSecret(data.clientSecret);
         setConvertedAmount(data.convertedAmount);
         setCurrencyCode(data.currencyCode);
+        setStripeIsLoaded(true);
+        console.log('clientSecret : ', clientSecret);
       })
       .catch((error) => {
         console.error('Error:', error);
@@ -50,11 +55,22 @@ export default function Checkout({ email }) {
 
   return (
     <>
-      {clientSecret && (
-        <Elements options={options} stripe={stripePromise}>
-          <CheckoutForm convertedAmount={convertedAmount} currencyCode={currencyCode} />
-        </Elements>
-      )}
+      <div className={`flex justify-center items-center ${stripeIsLoaded ? '' : 'h-[500px]'}`}>
+
+        {stripeIsLoaded ? (
+          clientSecret && (
+            <Elements options={options} stripe={stripePromise}>
+              <CheckoutForm convertedAmount={convertedAmount} currencyCode={currencyCode} handleSetStepJoin={handleSetStepJoin}/>
+            </Elements>
+          )
+        ) : (
+          <div className="flex flex-col justify-center items-center gap-y-4">
+            <div className="animate-spin rounded-full h-[40px] w-[40px] border-t-4 border-blue-500 mr-2"></div>
+            <span className="text-slate-800 text-lg">Veuillez patienter...</span>
+          </div>
+        )}
+      </div>
     </>
+
   );
 }

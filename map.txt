@@ -1,3 +1,15 @@
+-- envoyer une invitation discord avec le mot de passe (affectation du role investissement ou trader pro)
+-- ou aller dans l'espace perso et cliquer sur un lien qui reconduit sur discord (affectation du role investissement ou trader pro)
+
+dans la sidebar de vidéo formation (choisir investissement ou trader pro)
+-> pour trader pro, mettre un lock sur le contenu vidéo avec un bouton upgrade si l'utilisateur à déjà la formation investissement
+
+-> en haut a droite de l'écran, si l'utilisateur n'as aucune formation (bouton commencez maintenant avec l'achat de la formation souhaité investissement ou trader pro)
+-> Si l'utilisateur a déjà une formation investissement, il peut cliquer sur le bouton upgrade pour acheter une autre formation
+-> S'il possède les deux, le bouton disparait
+
+Dans la boutique, il peut choisir entre investissement (249$) et trader pro (1499$)
+
 ->form email
     -> vérification email existe deja
 ->create order 
