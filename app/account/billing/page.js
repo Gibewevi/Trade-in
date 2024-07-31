@@ -46,7 +46,7 @@ export default async function Page() {
                 <div className="">
                     <Sidebar />
                 </div>
-                <div className="w-[450px]">
+                <div className="w-[540px]">
                     <Billing billingData={billingData} />
                 </div>
 

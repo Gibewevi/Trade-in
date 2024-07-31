@@ -5,7 +5,7 @@ import { withFormik } from "formik";
 import * as Yup from 'yup';
 import Link from "next/link";
 
-function FormJoin({ handleJoin, stepJoin, handleSetStepJoin, email, values, touched, errors, handleChange, handleBlur, handleSubmit }) {
+function FormSubscription({ handleJoin, stepJoin, handleSetStepJoin, email, values, touched, errors, handleChange, handleBlur, handleSubmit }) {
     return (
         <div className="flex flex-col w-[400px] min-h-[650px] shadow-xl bg-slate-100 rounded-xl p-7 gap-y-9">
             <div className="flex flex-col w-full">
@@ -91,4 +91,4 @@ export default withFormik({
     handleSubmit: (values, { props }) => {
         props.handleJoin(values.email);
     }
-})(FormJoin);
+})(FormSubscription);

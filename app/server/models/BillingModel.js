@@ -1,16 +1,50 @@
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
+async function setBillingByUserId(userId, billing) {
+    try {
+       console.log('model billing');
+       console.log('userId : ', userId);
+       console.log('billing : ', billing);
+
+        // Mettre à jour les données de facturation pour l'utilisateur
+        const updatedBilling = await prisma.billing.upsert({
+            where: { userId: userId },
+            update: {
+                fullName: billing.fullName,
+                billingAddressLine1: billing.billingAddressLine1,
+                billingAddressLine2: billing.billingAddressLine2 || null,
+                billingCity: billing.billingCity,
+                billingState: billing.billingState,
+                billingPostalCode: billing.billingPostalCode,
+                billingCountry: billing.billingCountry,
+            },
+            create: {
+                userId: userId,
+                fullName: billing.fullName,
+                billingAddressLine1: billing.billingAddressLine1,
+                billingAddressLine2: billing.billingAddressLine2 || null,
+                billingCity: billing.billingCity,
+                billingState: billing.billingState,
+                billingPostalCode: billing.billingPostalCode,
+                billingCountry: billing.billingCountry,
+            }
+        });
+        console.log('Billing updated:', updatedBilling);
+        return updatedBilling;
+    } catch (error) {
+        console.error('Erreur lors de la mise à jour des données de facturation:', error);
+        throw new Error('Erreur lors de la mise à jour des données de facturation');
+    }
+}
 async function saveBillingInfo(billing) {
-    console.log('model billing : ', billing);
     // Récupérer l'utilisateur par email pour obtenir l'ID
     const userData = await prisma.user.findUnique({
         where: {
             email: billing.email
         }
     });
-    console.log('BillingModel  : ', userData);
-    
+
     if (!userData) {
         throw new Error('User not found');
     }
@@ -28,12 +62,12 @@ async function saveBillingInfo(billing) {
             billingCountry: billing.country // Pays
         }
     });
-    console.log('saveBillingInfo billingEntry : ', billingEntry);
     return billingEntry;
 }
 
 const billingModel = {
-    saveBillingInfo
+    saveBillingInfo,
+    setBillingByUserId
 };
 
 export default billingModel;

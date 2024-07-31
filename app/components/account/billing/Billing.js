@@ -1,12 +1,17 @@
-import { cookies } from 'next/headers';
-import jwt from 'jsonwebtoken';
-import BillingForm from './BillingForm';
+'use client';
 
-export default function Billing({billingData}) {
-    console.log("billingdata form : ",billingData);
+import BillingForm from './BillingForm';
+import billingService from '@/app/service/billingService';
+
+export default function Billing({ billingData }) {
+
+    const handleModifyBillingForm = async (newBillingData) => {
+        const response = await billingService.setBillingByUserId(newBillingData);
+    };
+
     return (
         <div>
-            <BillingForm billingData={billingData}/>
+            <BillingForm billingData={billingData} handleModifyBillingForm={handleModifyBillingForm} />
         </div>
     );
 }

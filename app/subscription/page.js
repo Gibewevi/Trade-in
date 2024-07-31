@@ -1,8 +1,8 @@
 "use client"
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import FormJoin from "../components/join/form/formJoin/FormJoin";
-import Checkout from "../components/join/form/formCheckout/Checkout";
+import FormSubscription from "../components/subscription/form/formSubscription/FormSubscription";
+import Checkout from "../components/subscription/form/formCheckout/Checkout";
 
 export default function Page() {
     const [stepJoin, setStepJoin] = useState('join');
@@ -20,7 +20,7 @@ export default function Page() {
 
     return (
         <div className="flex items-center justify-center w-full h-screen bg-slate-200">
-            <FormJoin handleJoin={handleJoin} stepJoin={stepJoin} handleSetStepJoin={handleSetStepJoin} email={email}/>
+            <FormSubscription handleJoin={handleJoin} stepJoin={stepJoin} handleSetStepJoin={handleSetStepJoin} email={email}/>
         </div >
     );
 }
