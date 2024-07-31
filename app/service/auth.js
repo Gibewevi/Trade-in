@@ -3,7 +3,7 @@ import { jwtVerify } from 'jose';
 
 const isUserAuthenticated = async () => {
     const cookieStore = cookies();
-    const jwtCookie = cookieStore.get('jwt');  
+    const jwtCookie = cookieStore.get('loginJWT');  
     const jwtToken = jwtCookie ? jwtCookie.value : '';  
 
     if (jwtToken) {

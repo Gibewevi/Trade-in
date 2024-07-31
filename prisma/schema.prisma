@@ -58,7 +58,10 @@ model invoice {
   tps           Float?    // Montant de la TPS, calculé après
   tvp           Float?    // Montant de la TVP, calculé après
   taxRate       Float?    // Taux de taxe total
+  exchangeRate  Float?    // Taux de change
   currency      String
+  countryCode    String    // Region pour calcul des taxes
+  regionCode    String    // Region pour calcul des taxes
   paymentStatus String
 
   user user     @relation(fields: [userId], references: [id])

@@ -26,6 +26,7 @@ export async function POST(request) {
                 const mail = await mailController.sendStartPassword(user.email, initialPassword);
                 console.log('mail : ', mail);
                 const invoice = await invoiceController.newInvoice(customer.metadata);
+                console.log('invoice : ', invoice);
                 break;
 
             default:

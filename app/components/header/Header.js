@@ -13,14 +13,17 @@ export default async function Header() {
                     </Link>
                     <nav className="flex flex-row items-center gap-x-[70px] ">
                         <Link href="/lessons/definition-des-cryptomonnaies"><span className="text-slate-500 hover:text-slate-900 hover:underline hover:underline-offset-4">Lessons</span></Link>
-                        {isConnected && <Link href="/account/details">
+                        {isConnected && <Link href="/account/billing">
                             <span className="text-slate-500 hover:text-slate-900 hover:underline hover:underline-offset-4">Account</span>
                         </Link>}
                         {/* <Link href="/actuality"><span className="text-slate-500 hover:text-slate-900 hover:underline hover:underline-offset-4">Actuality</span></Link> */}
                         {/* <Link href="/challenges"><span className="text-slate-500 hover:text-slate-900 hover:underline hover:underline-offset-4">Challenges</span></Link> */}
                         {/* <Link href="/airdrops"><span className="text-slate-500 hover:text-slate-900 hover:underline hover:underline-offset-4">Airdrops</span></Link> */}
-                        <Link href="/insights"><span className="text-slate-500 hover:text-slate-900 hover:underline hover:underline-offset-4">Insights</span></Link>
-                        <Link href="/watchlists"><span className="text-slate-500 hover:text-slate-900 hover:underline hover:underline-offset-4">watchlists</span></Link>
+                        <Link href="/backtesting"><span className="text-slate-500 hover:text-slate-900 hover:underline hover:underline-offset-4">Backtesting</span></Link>
+                        <Link href="/trading-board"><span className="text-slate-500 hover:text-slate-900 hover:underline hover:underline-offset-4">Trading board</span></Link>
+                        <Link href="/trading-board"><span className="text-slate-500 hover:text-slate-900 hover:underline hover:underline-offset-4">Challenges</span></Link>
+                        {/* <Link href="/insights"><span className="text-slate-500 hover:text-slate-900 hover:underline hover:underline-offset-4">Insights</span></Link> */}
+                        {/* <Link href="/watchlists"><span className="text-slate-500 hover:text-slate-900 hover:underline hover:underline-offset-4">watchlists</span></Link> */}
                     </nav>
                 </div>
                 <div className="flex flex-row justify-center items-center gap-x-5">
@@ -41,7 +44,7 @@ export default async function Header() {
                             <img src='/images/CarbonLogoDiscord.svg' className="w-[30px]" />
                             <span className="z-10 text-slate-100 text-md font-bold">Discord</span>
                         </button>
-                    </Link> : <Link href="/join">
+                    </Link> : <Link href="/subscription">
                         <button className="group h-[40px] bg-[#705DF2] p-4 rounded-xl flex justify-center items-center overflow-hidden relative">
                             <div className="absolute left-0 top-0 w-0 h-full bg-[#8b7bf3] transition-all duration-300 ease-in-out group-hover:w-full"></div>
                             <span className="z-10 text-slate-100 text-md font-bold">Commence maintenant</span>
