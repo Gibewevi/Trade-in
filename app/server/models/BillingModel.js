@@ -3,9 +3,6 @@ const prisma = new PrismaClient();
 
 async function setBillingByUserId(userId, billing) {
     try {
-       console.log('model billing');
-       console.log('userId : ', userId);
-       console.log('billing : ', billing);
 
         // Mettre à jour les données de facturation pour l'utilisateur
         const updatedBilling = await prisma.billing.upsert({
@@ -30,7 +27,6 @@ async function setBillingByUserId(userId, billing) {
                 billingCountry: billing.billingCountry,
             }
         });
-        console.log('Billing updated:', updatedBilling);
         return updatedBilling;
     } catch (error) {
         console.error('Erreur lors de la mise à jour des données de facturation:', error);

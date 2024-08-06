@@ -34,7 +34,6 @@ export default async function Page() {
         },
     });
     billingData.email = userData.email;
-    console.log('Billing data: ', billingData);
 
     return (
         <div className="w-full h-screen bg-slate-200 p-2">

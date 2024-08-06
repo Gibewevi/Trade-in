@@ -9,7 +9,8 @@ datasource db {
 
 enum AccessLevel {
   FREE
-  PREMIUM
+  INVESTMENT
+  TRADERPRO
 }
 
 model user {
@@ -52,6 +53,7 @@ model devise {
 model invoice {
   id            Int       @id @default(autoincrement())
   userId        Int
+  courseId      Int
   date          DateTime  @default(now())
   totalAmount   Float     // Montant TTC
   amountHt      Float?    // Montant HT, calculé après
@@ -60,14 +62,15 @@ model invoice {
   taxRate       Float?    // Taux de taxe total
   exchangeRate  Float?    // Taux de change
   currency      String
-  countryCode    String    // Region pour calcul des taxes
-  regionCode    String    // Region pour calcul des taxes
+  countryCode   String    // Region pour calcul des taxes
+  regionCode    String    // Pays pour calcul des taxes
   paymentStatus String
 
   user user     @relation(fields: [userId], references: [id])
 
   @@map("invoices")
 }
+
 
 model tax_rate {
   id                 Int       @id @default(autoincrement())
@@ -80,7 +83,7 @@ model tax_rate {
   @@map("tax_rates")
 }
 
-model Formation {
+model course {
   id          Int       @id @default(autoincrement())
   title       String
   description String?
@@ -88,7 +91,7 @@ model Formation {
   active      Boolean   @default(true)
   chapters    chapter[]
   
-  @@map("formations")
+  @@map("courses")
 }
 
 model chapter {
@@ -98,8 +101,8 @@ model chapter {
  description String
  lessons     lesson[]  @relation("chapterToLesson")
  duration    Int       @default(0)
- formationId Int
- formation   Formation @relation(fields: [formationId], references: [id])
+ courseId Int
+ course   course @relation(fields: [courseId], references: [id])
 
  @@map("chapters")
 }

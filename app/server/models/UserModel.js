@@ -5,6 +5,47 @@ import { randomBytes } from 'crypto';
 
 const prisma = new PrismaClient();
 
+// Fonction pour modifier son mot de passe par userId
+const setPasswordByUserId = async (userId, hashedPassword) => {
+  try {
+    // Mettre à jour le mot de passe dans la base de données
+    const user = await prisma.user.update({
+      where: { id: userId },
+      data: { password: hashedPassword },
+    });
+
+    return { success: true, message: 'Password updated successfully.', user };
+  } catch (error) {
+    console.error('Error updating password:', error);
+    return { success: false, message: 'Failed to update password.' };
+  }
+};
+
+// Récupérer l'utilisateur par son ID
+const getUserById = async (userId) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+    return user;
+  } catch (error) {
+    console.error("Error finding user by ID:", error);
+    throw error;
+  }
+};
+
+const setEmailByUserId = async (userId, email) => {
+  try {
+    const user = await prisma.user.update({
+      where: { id: userId },
+      data: { email: email }
+    });
+    return user;
+  } catch (error) {
+    console.error('Erreur lors de la mise à jour de l\'email:', error);
+    throw new Error('La mise à jour de l\'email a échoué.');
+  }
+};
 
 // Fonction qui valide ou non le compte de l'utilisateur
 const setAccountVerified = async (email, isVerified) => {
@@ -64,10 +105,14 @@ const addNewUser = async (user) => {
 
 
 const userModel = {
- addNewUser,
- findUserByEmail,
- isAccountVerified,
- setAccountVerified
+  addNewUser,
+  findUserByEmail,
+  isAccountVerified,
+  setAccountVerified,
+  setEmailByUserId,
+  getUserById,
+  setPasswordByUserId
+
 };
 
 export default userModel;

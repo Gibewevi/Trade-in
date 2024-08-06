@@ -14,7 +14,6 @@ export async function POST(request) {
                 const customerId = paymentIntent.customer;
                 const customer = await stripe.customers.retrieve(customerId);
                 const amount = paymentIntent.amount; 
-
                 const { initialPassword, hashedPassword } = await userController.createInitialPassword();
                 const user = {
                     password: hashedPassword,

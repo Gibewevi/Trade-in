@@ -13,8 +13,22 @@ async function getCurrencyByCountryCode(countryCode) {
     return currency;
 }
 
+async function getCountryNameByCountryCode(countryCode) {
+    try {
+        const country = await prisma.devise.findFirst({
+            where: { countryCode },
+            select: { country: true }
+        });
+        return country ? country.country : null;
+    } catch (error) {
+        console.error('Error fetching country name:', error);
+        throw error;
+    }
+}
+
 const deviseModel = {
-    getCurrencyByCountryCode
+    getCurrencyByCountryCode,
+    getCountryNameByCountryCode
 };
 
 export default deviseModel;

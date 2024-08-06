@@ -3,15 +3,27 @@ import { withFormik } from "formik";
 import * as Yup from 'yup';
 
 function BillingForm(props) {
-    const { values, touched, errors, handleChange, handleBlur } = props;
+    const { values, touched, errors, handleChange, handleBlur, billingMessage } = props;
     return (
         <form>
-            <div className="flex flex-col gap-y-4 ml-5">
+            <div className="flex flex-col gap-y-4 ml-5 p-3">
 
                 <span className="text-xl text-slate-800">Billing</span>
+                {billingMessage &&
+                    <div className="flex flex-row items-center p-3 w-full h-[90px] bg-gradient-to-r from-[#705DF2] to-blue-400 rounded-xl text-slate-100 p-6">
+                        <div className="w-[70px] p-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 32 32">
+                                <path fill="none" d="M16 8a1.5 1.5 0 1 1-1.5 1.5A1.5 1.5 0 0 1 16 8m4 13.875h-2.875v-8H13v2.25h1.875v5.75H12v2.25h8Z" />
+                                <path fill="currentColor" d="M16 2a14 14 0 1 0 14 14A14 14 0 0 0 16 2m0 6a1.5 1.5 0 1 1-1.5 1.5A1.5 1.5 0 0 1 16 8m4 16.125h-8v-2.25h2.875v-5.75H13v-2.25h4.125v8H20Z" />
+                            </svg>
+                        </div>
+                        <span className="p-3">
+                            {billingMessage}
+                        </span>
+                    </div>}
 
 
-                <div className="relative flex flex-row justify-center items-center h-[80px] w-full min-w-[200px]  rounded-xl p-2">
+                <div className="relative flex flex-row justify-center items-center h-[65px] w-full min-w-[200px] rounded-xl">
                     <input
                         className="flex-1 pl-[200px] h-full text-slate-800 text-[1.1em] p-3 bg-slate-50 focus:outline-none focus:ring-[0.1em] focus:ring-[#705DF2] focus:ring-offset-2 focus:ring-offset-slate-50 focus:shadow-xl rounded-xl placeholder-transparent"
                         placeholder=" "
@@ -33,7 +45,7 @@ function BillingForm(props) {
 
 
 
-                <div className="relative flex flex-row justify-center items-center h-[80px] w-full min-w-[200px]  rounded-xl p-2">
+                <div className="relative flex flex-row justify-center items-center h-[65px] w-full min-w-[200px] rounded-xl">
                     <input
                         className="flex-1 pl-[200px] h-full text-slate-800 text-[1.1em] p-3 bg-slate-50 focus:outline-none focus:ring-[0.1em] focus:ring-[#705DF2] focus:ring-offset-2 focus:ring-offset-slate-50 focus:shadow-xl rounded-xl placeholder-transparent"
                         placeholder=" "
@@ -53,7 +65,7 @@ function BillingForm(props) {
                     </label>
                 </div>
 
-                <div className="relative flex flex-row justify-center items-center h-[80px] w-full min-w-[200px]  rounded-xl p-2">
+                <div className="relative flex flex-row justify-center items-center h-[65px] w-full min-w-[200px] rounded-xl">
                     <input
                         className="flex-1 pl-[200px] h-full text-slate-800 text-[1.1em] p-3 bg-slate-50 focus:outline-none focus:ring-[0.1em] focus:ring-[#705DF2] focus:ring-offset-2 focus:ring-offset-slate-50 focus:shadow-xl rounded-xl placeholder-transparent"
                         placeholder=" "
@@ -73,7 +85,7 @@ function BillingForm(props) {
                     </label>
                 </div>
 
-                <div className="relative flex flex-row justify-center items-center h-[80px] w-full min-w-[200px]  rounded-xl p-2">
+                <div className="relative flex flex-row justify-center items-center h-[65px] w-full min-w-[200px] rounded-xl">
                     <input
                         className="flex-1 pl-[200px] h-full text-slate-800 text-[1.1em] p-3 bg-slate-50 focus:outline-none focus:ring-[0.1em] focus:ring-[#705DF2] focus:ring-offset-2 focus:ring-offset-slate-50 focus:shadow-xl rounded-xl placeholder-transparent"
                         placeholder=" "
@@ -93,7 +105,7 @@ function BillingForm(props) {
                     </label>
                 </div>
 
-                <div className="relative flex flex-row justify-center items-center h-[80px] w-full min-w-[200px]  rounded-xl p-2">
+                <div className="relative flex flex-row justify-center items-center h-[65px] w-full min-w-[200px] rounded-xl">
                     <input
                         className="flex-1 pl-[200px] h-full text-slate-800 text-[1.1em] p-3 bg-slate-50 focus:outline-none focus:ring-[0.1em] focus:ring-[#705DF2] focus:ring-offset-2 focus:ring-offset-slate-50 focus:shadow-xl rounded-xl placeholder-transparent"
                         placeholder=" "
@@ -113,7 +125,7 @@ function BillingForm(props) {
                     </label>
                 </div>
 
-                <div className="relative flex flex-row justify-center items-center h-[80px] w-full min-w-[200px]  rounded-xl p-2">
+                <div className="relative flex flex-row justify-center items-center h-[65px] w-full min-w-[200px] rounded-xl">
                     <input
                         className="flex-1 pl-[200px] h-full text-slate-800 text-[1.1em] p-3 bg-slate-50 focus:outline-none focus:ring-[0.1em] focus:ring-[#705DF2] focus:ring-offset-2 focus:ring-offset-slate-50 focus:shadow-xl rounded-xl placeholder-transparent"
                         placeholder=" "
@@ -133,7 +145,7 @@ function BillingForm(props) {
                     </label>
                 </div>
 
-                <div className="relative flex flex-row justify-center items-center h-[80px] w-full min-w-[200px]  rounded-xl p-2">
+                <div className="relative flex flex-row justify-center items-center h-[65px] w-full min-w-[200px] rounded-xl">
                     <input
                         className="flex-1 pl-[200px] h-full text-slate-800 text-[1.1em] p-3 bg-slate-50 focus:outline-none focus:ring-[0.1em] focus:ring-[#705DF2] focus:ring-offset-2 focus:ring-offset-slate-50 focus:shadow-xl rounded-xl placeholder-transparent"
                         placeholder=" "
@@ -153,7 +165,7 @@ function BillingForm(props) {
                     </label>
                 </div>
 
-                <div className="relative flex flex-row justify-center items-center h-[80px] w-full min-w-[200px]  rounded-xl p-2">
+                <div className="relative flex flex-row justify-center items-center h-[65px] w-full min-w-[200px] rounded-xl">
                     <input
                         className="flex-1 pl-[200px] h-full text-slate-800 text-[1.1em] p-3 bg-slate-50 focus:outline-none focus:ring-[0.1em] focus:ring-[#705DF2] focus:ring-offset-2 focus:ring-offset-slate-50 focus:shadow-xl rounded-xl placeholder-transparent"
                         placeholder=" "
@@ -173,9 +185,10 @@ function BillingForm(props) {
                     </label>
                 </div>
 
-                <button type='submit' onClick={props.handleSubmit} className="flex justify-center items-center t-6 p-3 bg-[#8b7bf3] hover:bg-[#705DF2] w-[100px] h-[40px] rounded-lg font-bold text-white text-sm hover:text-slate-100 transition duration-300 ease-in-out disabled:bg-gray-400 disabled:cursor-not-allowed">
-                    Modify
+                <button type='submit' onClick={props.handleSubmit} className="flex justify-center items-center t-6 p-3 bg-[#8b7bf3] hover:bg-[#705DF2] w-[100px] h-[65px] rounded-lg font-bold text-white text-sm hover:text-slate-100 transition duration-300 ease-in-out disabled:bg-gray-400 disabled:cursor-not-allowed">
+                    Submit
                 </button>
+
             </div>
         </form>
     )

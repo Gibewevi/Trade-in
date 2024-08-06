@@ -16,6 +16,17 @@ async function getUserByEmail(email) {
     }
 }
 
+// récupérer user par son id
+async function getUserById(id) {
+    try {
+        const user = await userModel.getUserById(id);
+        return user;
+    } catch (error) {
+        throw new Error("Unable to retrieve user by email.");
+    }
+}
+
+
 // Vérifier que l'utilisateur existe par le mail et le mot de passe
 async function authenticateUser(email, password) {
     try {
@@ -78,13 +89,28 @@ async function createInitialPassword() {
     return { initialPassword, hashedPassword };
 }
 
+async function setEmailByUserId(userId, email) {
+    return await userModel.setEmailByUserId(userId, email);
+};
+
+//fonction pour hasher un password en parametre et l'enregistrer dans la base de donnée pour modifier l'ancien password de l'utilisateur
+async function setPasswordByUserId(userId, password) {
+    const newPasswordHahed = await hashPassword(password);
+    const passwordUpdated = await userModel.setPasswordByUserId(userId, newPasswordHahed);
+    console.log('passwordUpdated : ', passwordUpdated);
+};
+
 const userController = {
     addNewUser,
     createInitialPassword,
     authenticateUser,
     isAccountVerified,
     setAccountVerified,
-    getUserByEmail
+    getUserByEmail,
+    getUserById,
+    setEmailByUserId,
+    setPasswordByUserId,
+    comparePasswords
 };
 
 export default userController;

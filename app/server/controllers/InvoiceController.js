@@ -146,13 +146,13 @@ function calculateConvertedAmount(amount, exchangeRate) {
 async function getExchangeRateAndPriceByIp(ip, amount) {
     const location = await fetchUserLocationByIp(ip);
     const countryCode = location.country_code;
+    const countryName = location.country_name;
     const regionCode = location.region_code;
     console.log('Country Code:', countryCode);
 
     const currency = await getCurrencyByCountryCode(countryCode);
     const currencyCode = currency.code;
     console.log('Currency:', currency);
-
     const exchangeRate = await getExchangeRate('USD', currencyCode);
     console.log('Exchange Rate:', exchangeRate);
 
@@ -164,7 +164,8 @@ async function getExchangeRateAndPriceByIp(ip, amount) {
         exchangeRate,
         countryCode,
         regionCode,
-        currencyCode
+        currencyCode, 
+        countryName, 
     };
 }
 

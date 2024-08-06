@@ -1,6 +1,7 @@
 
 
 const setBillingByUserId = async (billingData) => {
+    console.log('billing service');
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
     try {

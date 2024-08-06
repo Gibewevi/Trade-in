@@ -1,7 +1,7 @@
 import React from "react";
 import { PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js";
 
-export default function CheckoutForm({ convertedAmount, currencyCode, handleSetStepJoin }) {
+export default function CheckoutForm({ convertedAmount, currencyCode, handleSetStepJoin, coursePrice }) {
   const stripe = useStripe();
   const elements = useElements();
   const [message, setMessage] = React.useState(null);
@@ -76,7 +76,7 @@ export default function CheckoutForm({ convertedAmount, currencyCode, handleSetS
             </svg>
           ) : (
             <div className="flex flex-col">
-              <span className="z-10 text-sm font-bold">Payer 249,00 USD</span>
+              <span className="z-10 text-sm font-bold">Payer {coursePrice} USD</span>
               <span className="flex justify-end">
                 <span className="z-10 text-xs font-bold">~ {currencyCode} {convertedAmount}</span>
               </span>

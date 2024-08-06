@@ -100,11 +100,13 @@ const newInvoiceWithoutTaxRates = async (invoiceData) => {
   const totalAmount = parseFloat((parseFloat(invoiceData.amount) / 100).toFixed(2));
   const exchangeRate = parseFloat(invoiceData.exchangeRate);
   const currency = invoiceData.currencyCode.toString();
-
+  const courseId = parseInt(invoiceData.courseId, 10);
+  
   // Enregistrer un nouvel invoice dans la table sans les taux de taxes
   const newInvoice = await prisma.invoice.create({
     data: {
       userId: user.id,
+      courseId: courseId,
       totalAmount: totalAmount,
       amountHt: totalAmount,  // Sans taxes, montant HT = montant TTC
       tps: 0,
@@ -134,10 +136,13 @@ const newInvoiceWithTaxRates = async (invoiceData, taxRates) => {
   const taxRate = parseFloat(taxRates.totalTax);
   const exchangeRate = parseFloat(invoiceData.exchangeRate);
   const currency = invoiceData.currencyCode.toString();
+  const courseId = parseInt(invoiceData.courseId, 10);
+
   // Enregistrer un nouvel invoice dans la table avec les taux de taxes et les données de la facture
   const newInvoice = await prisma.invoice.create({
     data: {
       userId: user.id,
+      courseId: courseId,
       totalAmount: totalAmount,
       // Utiliser les montants fournis dans invoiceData
       amountHt: amountHt,

@@ -1,6 +1,7 @@
 import billingController from '@/app/server/controllers/BillingController';
 import invoiceController from '@/app/server/controllers/InvoiceController';
 import userController from '@/app/server/controllers/UserController';
+import deviseController from '@/app/server/controllers/DeviseController';
 import jwtController from '@/app/server/controllers/JwtController';
 import cookie from 'cookie'; // Importer la bibliothèque de gestion des cookies
 
@@ -66,6 +67,11 @@ export async function POST(request) {
 
     // Récupère les données de facturation du corps de la requête
     const billingData = await request.json();
+    console.log('billing data api : ', billingData);
+    //récupérer le billingState grace au billing Country.
+    const countryName = await deviseController.getCountryNameByCountryCode(billingData.country);
+    billingData.state = countryName;
+    console.log('billing save info : ', billingData);
 
     // Enregistre les informations de facturation
     await saveBillingInformation(billingData);

@@ -1,8 +1,10 @@
-
 import Link from "next/link";
 import authService from "@/app/service/auth";
+import { headers } from 'next/headers';
+
 export default async function Header() {
     const isConnected = await authService.isUserAuthenticated();
+
 
     return (
         <div className="fixed w-full h-[80px] z-50">
@@ -16,7 +18,7 @@ export default async function Header() {
                         {isConnected && <Link href="/account/billing">
                             <span className="text-slate-500 hover:text-slate-900 hover:underline hover:underline-offset-4">Account</span>
                         </Link>}
-                        {/* <Link href="/actuality"><span className="text-slate-500 hover:text-slate-900 hover:underline hover:underline-offset-4">Actuality</span></Link> */}
+                        <Link href="/actuality"><span className="text-slate-500 hover:text-slate-900 hover:underline hover:underline-offset-4">Actuality</span></Link>
                         {/* <Link href="/challenges"><span className="text-slate-500 hover:text-slate-900 hover:underline hover:underline-offset-4">Challenges</span></Link> */}
                         {/* <Link href="/airdrops"><span className="text-slate-500 hover:text-slate-900 hover:underline hover:underline-offset-4">Airdrops</span></Link> */}
                         <Link href="/backtesting"><span className="text-slate-500 hover:text-slate-900 hover:underline hover:underline-offset-4">Backtesting</span></Link>
@@ -31,9 +33,9 @@ export default async function Header() {
                         {isConnected ? <div className="flex flex-row"><img src='/images/CarbonLogout.svg' className="w-[25px]" />
                             <Link href="/account">
                                 <span className="text-md text-slate-900 font-semibold ml-2 hover:text-slate-900 hover:underline hover:underline-offset-4">Logout</span>
-                            </Link></div> : 
+                            </Link></div> :
                             <div className="flex flex-row">
-                            <img src='/images/CarbonUser.svg' className="w-[25px]" />
+                                <img src='/images/CarbonUser.svg' className="w-[25px]" />
                                 <Link href="/login">
                                     <span className="text-md text-slate-900 font-semibold ml-2">Login</span>
                                 </Link>

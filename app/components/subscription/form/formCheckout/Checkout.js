@@ -14,6 +14,7 @@ console.log('stripePromise : ', stripePromise);
 
 export default function Checkout({ email, handleSetStepJoin  }) {
   const [stripeIsLoaded, setStripeIsLoaded] = useState(false);
+  const [coursePrice, setCoursePrice] = useState(null);
   const [clientSecret, setClientSecret] = useState(null);
   const [convertedAmount, setConvertedAmount] = useState(null);
   const [currencyCode, setCurrencyCode] = useState(null);
@@ -36,6 +37,7 @@ export default function Checkout({ email, handleSetStepJoin  }) {
         setConvertedAmount(data.convertedAmount);
         setCurrencyCode(data.currencyCode);
         setStripeIsLoaded(true);
+        setCoursePrice(data.coursePrice);
         console.log('clientSecret : ', clientSecret);
       })
       .catch((error) => {
@@ -60,7 +62,7 @@ export default function Checkout({ email, handleSetStepJoin  }) {
         {stripeIsLoaded ? (
           clientSecret && (
             <Elements options={options} stripe={stripePromise}>
-              <CheckoutForm convertedAmount={convertedAmount} currencyCode={currencyCode} handleSetStepJoin={handleSetStepJoin}/>
+              <CheckoutForm convertedAmount={convertedAmount} currencyCode={currencyCode} coursePrice={coursePrice} handleSetStepJoin={handleSetStepJoin}/>
             </Elements>
           )
         ) : (

@@ -6,9 +6,12 @@ function LoginForm(props) {
     const { values, touched, errors, handleChange, handleBlur } = props;
     return (
         <form>
-            <div className="flex-1 flex flex-col w-[380px] h-[430px] justify-around items-center p-5 bg-slate-50 shadow-xl">
-
-                <h1 className="font-bold text-slate-800 text-4xl">Login</h1>
+            <div className="flex-1 flex flex-col w-[400px] shadow-xl bg-slate-100 rounded-xl p-7 gap-y-9">
+                <div className="flex flex-col w-full">
+                    
+                    <span className="text-xl text-slate-700 font-black">LOGIN*</span>
+                </div>
+     
 
                 <div className="w-72">
                     <div className="relative h-10 w-full min-w-[200px]">
@@ -80,7 +83,7 @@ export default withFormik({
             email: values.email,
             password: values.password
         }
-        console.log('credentials',credentials);
+        console.log('credentials', credentials);
         props.handleLogin(credentials);
     }
 })(LoginForm);

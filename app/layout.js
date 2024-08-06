@@ -10,11 +10,12 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+
   return (
     <html lang="en">
       <body className={inter.className}>
         <Header />
-        <div style={{ paddingTop: '80px' }}> {/* Ajoutez ici un padding-top */}
+        <div style={{ paddingTop: '80px' }}>
           {children}
         </div>
       </body>
