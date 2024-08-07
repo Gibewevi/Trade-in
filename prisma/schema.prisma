@@ -14,18 +14,28 @@ enum AccessLevel {
 }
 
 model user {
-  id          Int       @id @default(autoincrement())
-  email       String    @unique
-  password    String
-  isVerified  Boolean   @default(false)
+  id                      Int                     @id @default(autoincrement())
+  email                   String                  @unique
+  password                String
+  isVerified              Boolean                 @default(false)
 
-  billing     billing?
-  invoices    invoice[]
+  billing                 billing?
+  invoices                invoice[]
+  passwordResetTokens     PasswordResetToken[]    // Ajoutez cette ligne
 
   @@map("users")
 }
 
+model PasswordResetToken {
+  id        Int      @id @default(autoincrement())
+  uuid      String   @unique
+  userId    Int
+  user      user     @relation(fields: [userId], references: [id])
+  expiresAt DateTime
+  createdAt DateTime @default(now())
 
+  @@map("password_reset_tokens")
+}
 model billing {
   id                   Int       @id @default(autoincrement())
   userId               Int       @unique
@@ -70,7 +80,6 @@ model invoice {
 
   @@map("invoices")
 }
-
 
 model tax_rate {
   id                 Int       @id @default(autoincrement())

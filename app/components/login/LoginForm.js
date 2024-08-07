@@ -3,18 +3,18 @@ import { withFormik } from "formik";
 import * as Yup from 'yup';
 
 function LoginForm(props) {
-    const { values, touched, errors, handleChange, handleBlur } = props;
+    const { values, touched, errors, handleChange, handleBlur, setForm } = props;
     return (
         <form>
-            <div className="flex-1 flex flex-col w-[400px] shadow-xl bg-slate-100 rounded-xl p-7 gap-y-9">
+            <div className="flex-1 flex flex-col gap-y-8">
                 <div className="flex flex-col w-full">
-                    
+
                     <span className="text-xl text-slate-700 font-black">LOGIN*</span>
                 </div>
-     
 
-                <div className="w-72">
-                    <div className="relative h-10 w-full min-w-[200px]">
+
+                <div className="w-full">
+                    <div className="relative h-[50px] w-full min-w-[200px]">
                         <input
                             className="peer h-full w-full rounded-[7px] border-solid border-slate-300 bg-slate-100 px-3 py-2.5 font-sans text-sm font-normal text-slate-800 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-pink-500 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
                             placeholder=" "
@@ -34,8 +34,8 @@ function LoginForm(props) {
                 </div>
 
 
-                <div className="w-72">
-                    <div className="relative h-10 w-full min-w-[200px]">
+                <div className="w-full">
+                    <div className="relative h-[50px] w-full min-w-[200px]">
                         <input
                             className="peer h-full w-full rounded-[7px] border-solid border-slate-300 bg-slate-100 px-3 py-2.5 font-sans text-sm font-normal text-slate-800 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-pink-500 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
                             placeholder=" "
@@ -55,15 +55,23 @@ function LoginForm(props) {
                 </div>
 
                 <div className="flex items-center justify-center w-full">
-                    <span className="underline underline-offset-1 text-slate-600 text-sm">Vous avez oublié votre mot de passe ?</span>
+                    <span onClick={() => setForm('forgotPassword')} className="underline underline-offset-1 text-slate-600 text-sm cursor-pointer">Vous avez oublié votre mot de passe ?</span>
+
                 </div>
                 <div className="flex items-center justify-center w-full">
                     <span className="text-red-600 text-sm">{props.errorLogin}</span>
                 </div>
 
-                <button type='submit' onClick={props.handleSubmit} className="p-3 bg-[#8b7bf3] hover:bg-[#705DF2] h-[58px] w-full rounded-xl font-bold text-lg text-white hover:text-slate-100 transition duration-300 ease-in-out">
-                    Login to account
-                </button>
+                <div className="w-full flex justify-end">
+                    <button
+                        type='submit'
+                        onClick={props.handleSubmit}
+                        className="flex justify-center items-center p-3 w-[120px] bg-[#8b7bf3] hover:bg-[#705DF2] h-[50px] rounded-xl font-bold text-lg text-white hover:text-slate-100 transition duration-300 ease-in-out text-center"
+                    >
+                        Login
+                    </button>
+                </div>
+
             </div>
         </form>
     )

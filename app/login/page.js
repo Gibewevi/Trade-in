@@ -4,7 +4,10 @@ import { useState } from "react";
 import { useRouter } from 'next/navigation'
 import LoginForm from "../components/login/LoginForm";
 import AddressForm from "../components/login/AdressForm";
+import ForgotPassword from "../components/login/ForgotPassword";
+
 import userService from "../service/user";
+import passwordService from "../service/password";
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 
@@ -15,13 +18,13 @@ export default function Page() {
     const [form, setForm] = useState('login');
     const [credentials, setCredentials] = useState();
     const [errorLogin, setErrorLogin] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleLogin = async (credentials) => {
         setCredentials(credentials);
         try {
             const login = await userService.login(credentials);
-            console.log('login : ', login);
-            console.log('login success : ', login.data.success);
+
             if (login.data.success) {
                 if (login.data.isAccountVerified) {
                     window.location.href = '/';
@@ -69,14 +72,40 @@ export default function Page() {
         }
     };
 
+    const handleForgotPassword = async (email) => {
+        setIsLoading(true); // Activer le spinner
+        try {
+            console.log('Email for password reset:', email);
+            const response = await passwordService.requestPasswordReset(email);
+            if (response.message === "Email de réinitialisation envoyé avec succès.") {
+                alert("Un email de réinitialisation a été envoyé à votre adresse.");
+            } else {
+                alert("Une erreur est survenue lors de la demande de réinitialisation de mot de passe.");
+            }
+        } catch (error) {
+            console.error('Erreur lors de la demande de réinitialisation de mot de passe:', error);
+            alert("Une erreur est survenue lors de la demande de réinitialisation de mot de passe.");
+        } finally {
+            setIsLoading(false); 
+        }
+    };
+
+
     return (
         <Elements stripe={stripePromise}>
             <div className="flex items-center justify-center w-full h-screen bg-slate-200">
-                {form === 'login' ? (
-                    <LoginForm handleLogin={handleLogin} errorLogin={errorLogin} />
-                ) : (
-                    <AddressForm onSubmit={handleAddressSubmit} />
-                )}
+                <div className="w-[400px] max-w-[400px] shadow-xl bg-slate-100 rounded-xl p-9">
+                    {form === 'login' ? (
+                        <LoginForm handleLogin={handleLogin} errorLogin={errorLogin} setForm={setForm} />
+                    ) : form === 'accountVerified' ? (
+                        <AddressForm onSubmit={handleAddressSubmit} />
+                    ) : form === 'forgotPassword' ? (
+                        <ForgotPassword setForm={setForm} handleForgotPassword={handleForgotPassword} isLoading={isLoading}/>
+                    ) : null}
+                </div>
+
+
+
             </div>
         </Elements>
     )

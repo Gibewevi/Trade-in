@@ -6,6 +6,35 @@ const mailerSend = new MailerSend({
     apiKey: process.env.MAILSEND_API_KEY
 });
 
+const baseUrl = process.env.BASE_URL_DEV;
+
+// Fonction qui envoie un mail et qui prend en paramètre (email, token)
+async function sendPasswordResetEmail(emailAddress, token) {
+    const resetUrl = `${baseUrl}/reset-password/${token}`;
+
+    const sender = new Sender("contact@bitlearn.fr", "BitLearn");
+    const recipient = new Recipient(emailAddress, "Utilisateur de BitLearn");
+
+    const emailParams = new EmailParams()
+        .setFrom(sender)
+        .setTo([recipient])
+        .setSubject('Réinitialisation du mot de passe')
+        .setHtml(`
+<p>Vous avez demandé à réinitialiser votre mot de passe. Veuillez utiliser le lien suivant :</p>
+<p><a href="${resetUrl}">Réinitialiser le mot de passe</a></p>
+`);
+
+    try {
+        const response = await mailerSend.email.send(emailParams);
+        console.log("Réponse de l'API MailerSend:", response);
+        return 'Email envoyé avec succès';
+    } catch (error) {
+        console.error('Erreur lors de l\'envoi de l\'email:', error);
+        throw error;
+    }
+};
+
+
 // fonction qui envoie un mail et qui prend en param (email, password)
 async function sendStartPassword(emailAddress, password) {
     const sender = new Sender("contact@bitlearn.fr", "BitLearn");
@@ -42,6 +71,7 @@ async function sendStartPassword(emailAddress, password) {
 // Contrôleur utilisateur
 const mailController = {
     sendStartPassword,
+    sendPasswordResetEmail
 };
 
 export default mailController;

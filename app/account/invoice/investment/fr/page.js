@@ -8,6 +8,7 @@ import InvoiceStatus from '@/app/components/invoice/InvoiceStatus';
 import InvoiceHeader from '@/app/components/invoice/InvoiceHeader';
 import TaxDetails from '@/app/components/invoice/TaxDetails';
 import { AmountDetails } from '@/app/components/invoice/AmountDetails';
+import RemoveHeader from '@/app/components/account/invoice/RemoveHeader';
 
 const JWT_SECRET = process.env.JWT_SECRET;
 const prisma = new PrismaClient();
@@ -29,7 +30,6 @@ function formatDateExchangeRate(date) {
   const day = (`0${d.getDate()}`).slice(-2);
   return `${year}/${month}/${day}`;
 }
-
 
 export default async function Page() {
   const cookieStore = cookies();
@@ -94,63 +94,64 @@ export default async function Page() {
   const totalAmountLocal = parseFloat((totalCalculatedAmountUSD * exchangeRate).toFixed(2));
 
   return (
-    <div className='flex flex-col gap-y-4 w-full text-slate-500 p-[30px] mt-[-80px]'>
-      <h1 className='font-bold text-2xl'>FACTURE</h1>
-      <div className='flex flex-col gap-y-3'>
-        <InvoiceHeader invoice={invoice} />
-        <BillingDetails billing={billing} />
-        <CompanyDetails />
+    <>
+      <RemoveHeader />
+      <div className='flex flex-col gap-y-4 w-full bg-white text-slate-500 absolute top-0 left-0 p-[40px]'>
+      
+          <h1 className='font-bold text-3xl mb-5'>FACTURE</h1>
 
-        <div className='flex flex-col mt-3'>
-          <h2 className='text-lg font-bold'>DÉTAILS</h2>
-          <div className='flex flex-col gap-y-1'>
-            <div className='flex flex-col text-right'>
-              <span className='text-xs'>Taux de change calculé le {formatDateExchangeRate(invoice.date)}</span>
-              <span className='text-xs'>USD vers {invoice.currency} = {invoice.exchangeRate}</span>
+          <InvoiceHeader invoice={invoice} />
+          <BillingDetails billing={billing} />
+          <CompanyDetails />
+
+          <div className='flex flex-col mt-3'>
+            <h2 className='text-lg font-bold'>DÉTAILS</h2>
+            <div className='flex flex-col gap-y-1'>
+              <div className='flex flex-col text-right'>
+                <span className='text-xs'>Taux de change calculé le {formatDateExchangeRate(invoice.date)}</span>
+                <span className='text-xs'>USD vers {invoice.currency} = {invoice.exchangeRate}</span>
+              </div>
+
+              <AmountDetails
+                label="BITLEARN INVESTMENT"
+                amountUSD={amountHt}
+                amountLocal={amountHt * invoice.exchangeRate}
+                currency={invoice.currency}
+                hiddenPrice={true}
+              />
+
+              {invoice.taxRate > 0 &&
+                <>
+                  <TaxDetails
+                    label={`TPS (${invoice.tps}%)`}
+                    amountUSD={tpsAmountUSD}
+                    amountLocal={tpsAmountLocal}
+                    totalAfterTaxUSD={amountHt + tpsAmountUSD}
+                    totalAfterTaxLocal={(amountHt + tpsAmountUSD) * exchangeRate}
+                    currency={invoice.currency}
+                  />
+                  <TaxDetails
+                    label={`TVQ (${invoice.tvp}%)`}
+                    amountUSD={tvqAmountUSD}
+                    amountLocal={tvqAmountLocal}
+                    totalAfterTaxUSD={amountHt + tpsAmountUSD + tvqAmountUSD}
+                    totalAfterTaxLocal={totalAmountLocal}
+                    currency={invoice.currency}
+                  />
+                </>
+              }
+              <AmountDetails
+                label="Total"
+                amountUSD={totalCalculatedAmountUSD}
+                amountLocal={totalAmountLocal}
+                currency={invoice.currency}
+                hasBorder={false}
+              />
             </div>
-
-            <AmountDetails
-              label="BITLEARN INVESTMENT"
-              amountUSD={amountHt}
-              amountLocal={amountHt * invoice.exchangeRate}
-              currency={invoice.currency}
-              hiddenPrice= {true}
-            />
-
-            {invoice.taxRate > 0 &&
-              <>
-                <TaxDetails
-                  label={`TPS (${invoice.tps}%)`}
-                  amountUSD={tpsAmountUSD}
-                  amountLocal={tpsAmountLocal}
-                  totalAfterTaxUSD={amountHt + tpsAmountUSD}
-                  totalAfterTaxLocal={(amountHt + tpsAmountUSD) * exchangeRate}
-                  currency={invoice.currency}
-                />
-                <TaxDetails
-                  label={`TVQ (${invoice.tvp}%)`}
-                  amountUSD={tvqAmountUSD}
-                  amountLocal={tvqAmountLocal}
-                  totalAfterTaxUSD={amountHt + tpsAmountUSD + tvqAmountUSD}
-                  totalAfterTaxLocal={totalAmountLocal}
-                  currency={invoice.currency}
-                />
-              </>
-            }
-            <AmountDetails
-              label="Total"
-              amountUSD={totalCalculatedAmountUSD}
-              amountLocal={totalAmountLocal}
-              currency={invoice.currency}
-              hasBorder={false}
-            />
           </div>
-        </div>
-
-        <PaymentTerms />
-        <InvoiceStatus />
-
+          <PaymentTerms />
+          <InvoiceStatus />
       </div>
-    </div>
+    </>
   );
 }

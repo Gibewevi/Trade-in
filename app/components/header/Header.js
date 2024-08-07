@@ -1,17 +1,18 @@
 import Link from "next/link";
 import authService from "@/app/service/auth";
-import { headers } from 'next/headers';
 
 export default async function Header() {
     const isConnected = await authService.isUserAuthenticated();
 
-
     return (
-        <div className="fixed w-full h-[80px] z-50">
+        <div className="fixed w-full h-[80px] z-50" id='header'>
             <div className="flex flex-row h-full bg-slate-100 items-center p-6">
                 <div className="flex flex-1 gap-x-[70px]">
                     <Link href="/" aria-label="Homepage">
-                        <h1 className="font-black text-3xl text-slate-900">BitLearn</h1>
+                        <div className="flex flex-row gap-x-2">
+                            <h1 className="font-black text-3xl text-slate-900">BitLearn</h1>
+                            <h2 className="font-semibold text-xs text-slate-900">BETA</h2>
+                        </div>
                     </Link>
                     <nav className="flex flex-row items-center gap-x-[70px] ">
                         <Link href="/lessons/definition-des-cryptomonnaies"><span className="text-slate-500 hover:text-slate-900 hover:underline hover:underline-offset-4">Lessons</span></Link>

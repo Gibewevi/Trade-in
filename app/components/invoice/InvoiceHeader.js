@@ -18,9 +18,15 @@ export default function InvoiceHeader({ invoice }) {
   }
 
   return (
-    <div className='flex flex-col'>
-      <span className='text-xs'>Numéro : <strong>#{invoice.id}- {formatDate(invoice.date)}</strong></span>
-      <span className='text-xs'>Date d'édition : <strong>{formatDateExchangeRate(invoice.date)}</strong></span>
+    <div className='flex flex-col text-md'>
+      <div className="flex flex-row">
+        <span className="min-w-[130px]">Numéro : </span>
+        <strong>#{invoice.id}- {formatDate(invoice.date)}</strong>
+      </div>
+      <div className="flex flex-row">
+        <span className="min-w-[130px]">Date d'édition : </span>
+        <strong>{formatDateExchangeRate(invoice.date)}</strong>
+      </div>
     </div>
   );
 }

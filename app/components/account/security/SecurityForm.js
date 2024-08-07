@@ -102,18 +102,18 @@ export default withFormik({
         confirmPassword: ""
     }),
     validationSchema: Yup.object().shape({
-        // oldPassword: Yup.string()
-        //     .required('Ancien mot de passe est requis'),
-        // password: Yup.string()
-        //     .required('Mot de passe est requis')
-        //     .min(8, 'Le mot de passe doit contenir au moins 8 caractères')
-        //     .matches(/[a-z]/, 'Le mot de passe doit contenir au moins une minuscule')
-        //     .matches(/[A-Z]/, 'Le mot de passe doit contenir au moins une majuscule')
-        //     .matches(/\d/, 'Le mot de passe doit contenir au moins un chiffre')
-        //     .matches(/[@$!%*?&#]/, 'Le mot de passe doit contenir au moins un caractère spécial'),
-        // confirmPassword: Yup.string()
-        //     .oneOf([Yup.ref('password'), null], 'Les mots de passe doivent correspondre')
-        //     .required('Confirmation du mot de passe est requise')
+        oldPassword: Yup.string()
+            .required('Ancien mot de passe est requis'),
+        password: Yup.string()
+            .required('Mot de passe est requis')
+            .min(8, 'Le mot de passe doit contenir au moins 8 caractères')
+            .matches(/[a-z]/, 'Le mot de passe doit contenir au moins une minuscule')
+            .matches(/[A-Z]/, 'Le mot de passe doit contenir au moins une majuscule')
+            .matches(/\d/, 'Le mot de passe doit contenir au moins un chiffre')
+            .matches(/[@$!%*?&#]/, 'Le mot de passe doit contenir au moins un caractère spécial'),
+        confirmPassword: Yup.string()
+            .oneOf([Yup.ref('password'), null], 'Les mots de passe doivent correspondre')
+            .required('Confirmation du mot de passe est requise')
     }),
     handleSubmit: (values, { props }) => {
         props.handleUpdatePassword(values.oldPassword,values.password );
